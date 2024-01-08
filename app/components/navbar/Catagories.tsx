@@ -9,6 +9,8 @@ import { FaSkiing } from "react-icons/fa";
 import { GiMountains } from "react-icons/gi";
 import CategoryBox from "@/app/components/CategoryBox";
 import { usePathname, useSearchParams } from "next/navigation";
+
+
 export const catagories = [
 	{
 		label: "Beach",
