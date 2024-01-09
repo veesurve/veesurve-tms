@@ -9,7 +9,17 @@ import { format } from "date-fns";
 import Image from "next/image";
 import HeartButton from "@/app/components/HeartButton";
 import Button from "../Button";
-
+import {
+	MdBusAlert,
+	MdFlight,
+	MdNightlight,
+	MdNoMeals,
+	MdOutlineDirectionsBusFilled,
+} from "react-icons/md";
+import { FaStar, FaSun, FaBreadSlice, FaBinoculars } from "react-icons/fa";
+import { FaBookAtlas } from "react-icons/fa6";
+import { BsFillBuildingsFill } from "react-icons/bs";
+import { GiMeal } from "react-icons/gi";
 
 interface ListingCardProps {
 	data: Listing;
@@ -52,11 +62,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
 		return data.price;
 	}, [reservation, data.price]);
 
- let INR = new Intl.NumberFormat("en-IN", {
+	let INR = new Intl.NumberFormat("en-IN", {
 		style: "currency",
 		currency: "INR",
-		maximumSignificantDigits: 1,
- });
+		
+	});
 
 	const reservationDate = useMemo(() => {
 		if (!reservation) {
@@ -85,29 +95,142 @@ const ListingCard: React.FC<ListingCardProps> = ({
 						<HeartButton listingId={data.id} currentUser={currentUser} />
 					</div>
 				</div>
+				<div className="font-extrabold flex justify-center">
+					{data.packageName}
+				</div>
 				<div className="font-semibold text-lg">
 					{location?.region}, {location?.label}
 				</div>
 				<div className="font-light text-neutral-500">
-					{reservationDate || data.catagory}
+					{reservationDate || (data.catagory && data.citiesCovered)}
 				</div>
-    <div className="flex flex-row items-center gap-1">
-     <div className="font-semibold flex items-start justify-center">
-      
-      {INR.format(price)}
-     </div>
-     {!reservation && (
-      <div className="font-light">Per Person</div>
-     )}
-    </div>
-    {onAction && actionLabel &&(
-     <Button
-     disabled={disabled}
-     small
-     label={actionLabel}
-     onClick={handleCancel}
-     />
-    )}
+				<div className="flex flex-row items-center justify-start gap-2">
+					<div className=" flex flex-row items-center justify-start">
+						<MdNightlight style={{ color: "blue" }} />
+						{data.nights}
+					</div>
+					<div className=" flex flex-row items-center justify-start gap-1">
+						<FaSun style={{ color: "blue" }} />
+						{data.days}
+					</div>
+					<div className=" flex flex-row items-center justify-start">
+						{data.flights ? (
+							<MdFlight style={{ color: "green" }} />
+						) : (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-red-700">No </span>
+								<MdFlight style={{ color: "red" }} />
+							</div>
+						)}
+					</div>
+					<div className=" flex flex-row items-center justify-start">
+						{data.visaRequired ? (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-red-700">Need </span>
+								<FaBookAtlas style={{ color: "red" }} />
+							</div>
+						) : (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-green-700">No </span>
+								<FaBookAtlas style={{ color: "green" }} />
+							</div>
+						)}
+					</div>
+
+					<div className=" flex flex-row items-center justify-start gap-1 ">
+						<BsFillBuildingsFill style={{ color: "blue" }} />
+						{data.hotelStar}
+						<FaStar size={12} style={{ color: "blue" }} />
+					</div>
+				</div>
+
+				<div className="flex flex-row items-center justify-start gap-[6px]">
+					<div className=" flex flex-row items-center justify-start">
+						{data.breakfast ? (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-green-700">Breakfast </span>
+								<FaBreadSlice style={{ color: "green" }} />
+							</div>
+						) : (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-red-700">No Breakfast </span>
+								<FaBreadSlice style={{ color: "red" }} />
+							</div>
+						)}
+					</div>
+
+					<div className=" flex flex-row items-center justify-start">
+						{data.lunch ? (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-green-700">lunch </span>
+								<GiMeal style={{ color: "green" }} />
+							</div>
+						) : (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-red-700">No lunch </span>
+								<MdNoMeals style={{ color: "red" }} />
+							</div>
+						)}
+					</div>
+
+					<div className=" flex flex-row items-center justify-start">
+						{data.dinner ? (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-green-700">dinner </span>
+								<GiMeal style={{ color: "green" }} />
+							</div>
+						) : (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-red-700">No dinner </span>
+								<MdNoMeals style={{ color: "red" }} />
+							</div>
+						)}
+					</div>
+				</div>
+
+				<div className="flex flex-row items-center justify-start gap-8">
+					<div className=" flex flex-row items-center justify-start">
+						{data.sightseeing ? (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-green-700">sightseeing </span>
+								<FaBinoculars style={{ color: "green" }} />
+							</div>
+						) : (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-red-700">No sightseeing </span>
+								<FaBinoculars style={{ color: "red" }} />
+							</div>
+						)}
+					</div>
+
+					<div className=" flex flex-row items-center justify-start">
+						{data.transfers ? (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-green-700">transfers </span>
+								<MdOutlineDirectionsBusFilled style={{ color: "green" }} />
+							</div>
+						) : (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="text-red-700">No transfers </span>
+								<MdBusAlert style={{ color: "red" }} />
+							</div>
+						)}
+					</div>
+				</div>
+				<div className="flex flex-row items-center gap-1">
+					<div className="font-semibold flex items-start justify-center">
+						{INR.format(price)}
+					</div>
+					{!reservation && <div className="font-light">Per Person</div>}
+				</div>
+				{onAction && actionLabel && (
+					<Button
+						disabled={disabled}
+						small
+						label={actionLabel}
+						onClick={handleCancel}
+					/>
+				)}
 			</div>
 		</div>
 	);
