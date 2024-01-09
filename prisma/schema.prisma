@@ -49,36 +49,35 @@ model Account {
 }
 
 model Listing {
-  id             String    @id @default(auto()) @map("_id") @db.ObjectId
-  packageName    String
-  destination    String
-  citiesCovered  String[]
-  departureCity  String
-  nights         Int
-  days           Int
-  flights        Boolean?
-  visa_fees      Boolean?
-  hotelStar      Int
-  breakfast      Boolean?
-  lunch          Boolean?
-  dinner         Boolean?
-  sightseeing    Boolean?
-  transfers      Boolean?
-  price          Int
-  emi            Boolean?
-  emiMonths      Int?
-  departureDates DateTime?
-  keyHighlights  String?
-  itenary        String?
-  inclusions     String?
-  exclusions     String?
-  tnc            String?
-  imageSrc       String
-  createdAt      DateTime  @default(now())
-  catagory       String
-  locationValue  String
-  userId         String    @db.ObjectId
-  review         String?
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  packageName   String
+  destination   String
+  citiesCovered String
+  departureCity String
+  nights        Int
+  days          Int
+  flights       Boolean?
+  visaRequired  Boolean?
+  hotelStar     Int
+  breakfast     Boolean?
+  lunch         Boolean?
+  dinner        Boolean?
+  sightseeing   Boolean?
+  transfers     Boolean?
+  price         Int
+  emi           Boolean?
+  emiMonths     Int?
+  keyHighlights String?
+  itenary       String?
+  inclusions    String?
+  exclusions    String?
+  tnc           String?
+  imageSrc      String
+  createdAt     DateTime @default(now())
+  category      String
+  locationValue String
+  userId        String   @db.ObjectId
+  review        String?
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
