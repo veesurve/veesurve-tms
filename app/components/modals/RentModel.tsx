@@ -85,6 +85,7 @@ const RentModal = () => {
 
 	const Map = useMemo(
 		() => dynamic(() => import("@/app/components/Map"), { ssr: false }),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[destination]
 	);
 	const setCustomValue = (id: string, value: any) => {
