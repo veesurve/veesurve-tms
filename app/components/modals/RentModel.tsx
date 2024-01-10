@@ -82,11 +82,18 @@ const RentModal = () => {
 	const nights = watch("nights");
 	const days = watch("days");
 	const imageSrc = watch("imageSrc");
+	const itenary = watch("itenary");
 
 	const Map = useMemo(
 		() => dynamic(() => import("@/app/components/Map"), { ssr: false }),
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 		[destination]
+	);
+
+	const Editor = useMemo(
+		() => dynamic(() => import("@/app/components/editor"), { ssr: false }),
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		[itenary]
 	);
 	const setCustomValue = (id: string, value: any) => {
 		setValue(id, value, {
@@ -227,7 +234,7 @@ const RentModal = () => {
 					{/*END yes no input filds */}
 					{/*START yes no input filds */}
 					<div className="flex flex-col items-center justify-center gap-2">
-						<h1>Visa Required</h1>
+						<h1>Visa Included</h1>
 						<div className=" flex flex-row gap-4">
 							<label>Yes</label>
 							<input
@@ -424,6 +431,8 @@ const RentModal = () => {
 						errors={errors}
 						required
 					/>
+
+					{/* <Editor /> */}
 				</div>
 				<hr />
 				<div className=" flex flex-col gap-1 ">

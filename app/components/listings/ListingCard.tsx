@@ -1,28 +1,25 @@
 "use client";
 
 import useCountries from "@/app/hooks/useCountries";
-import { SafeUser } from "@/app/types";
+import { SafeListings, SafeUser } from "@/app/types";
 import { Listing, Reservation } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { format } from "date-fns";
 import Image from "next/image";
 import HeartButton from "@/app/components/HeartButton";
-import Button from "../Button";
-import {
-	MdBusAlert,
-	MdFlight,
-	MdNightlight,
-	MdNoMeals,
-	MdOutlineDirectionsBusFilled,
-} from "react-icons/md";
+import Button from "@/app/components/Button";
+
+import dynamic from "next/dynamic";
+
+import { MdFlight, MdNightlight, MdOutlineDirectionsBusFilled } from "react-icons/md";
 import { FaStar, FaSun, FaBreadSlice, FaBinoculars } from "react-icons/fa";
-import { FaBookAtlas } from "react-icons/fa6";
 import { BsFillBuildingsFill } from "react-icons/bs";
 import { GiMeal } from "react-icons/gi";
+import { TbBrandVisa } from "react-icons/tb";
 
 interface ListingCardProps {
-	data: Listing;
+	data: SafeListings;
 	reservation?: Reservation;
 	onAction?: (id: string) => void;
 	disabled?: boolean;
@@ -65,7 +62,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
 	let INR = new Intl.NumberFormat("en-IN", {
 		style: "currency",
 		currency: "INR",
-		
 	});
 
 	const reservationDate = useMemo(() => {
@@ -83,7 +79,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 			onClick={() => router.push(`/listings/${data.id}`)}
 			className="col-span-1 cursor-pointer group"
 		>
-			<div className="flex flex-col gap-2 w-full">
+			<div className="flex flex-col gap-2 w-full border rounded-lg border-neutral-400">
 				<div className="w-full aspect-square relative overflow-hidden rounded-xl">
 					<Image
 						fill
@@ -102,37 +98,32 @@ const ListingCard: React.FC<ListingCardProps> = ({
 					{location?.region}, {location?.label}
 				</div>
 				<div className="font-light text-neutral-500">
-					{reservationDate || (data.catagory && data.citiesCovered)}
+					{reservationDate || data.catagory}
+				</div>
+				<div className="font-semibold text-neutral-500 uppercase">
+					{data.citiesCovered}
 				</div>
 				<div className="flex flex-row items-center justify-start gap-2">
 					<div className=" flex flex-row items-center justify-start">
 						<MdNightlight style={{ color: "blue" }} />
 						{data.nights}
+						<label>N </label>
 					</div>
 					<div className=" flex flex-row items-center justify-start gap-1">
 						<FaSun style={{ color: "blue" }} />
 						{data.days}
+						<label>D </label>
 					</div>
-					<div className=" flex flex-row items-center justify-start">
-						{data.flights ? (
-							<MdFlight style={{ color: "green" }} />
-						) : (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-red-700">No </span>
-								<MdFlight style={{ color: "red" }} />
-							</div>
-						)}
+				</div>
+
+				<div className="flex flex-row items-center justify-start ">
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.flights && <MdFlight size={20} style={{ color: "green" }} />}
 					</div>
-					<div className=" flex flex-row items-center justify-start">
-						{data.visaRequired ? (
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.visaRequired && (
 							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-red-700">Need </span>
-								<FaBookAtlas style={{ color: "red" }} />
-							</div>
-						) : (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-green-700">No </span>
-								<FaBookAtlas style={{ color: "green" }} />
+								<TbBrandVisa size={35} style={{ color: "green" }} />
 							</div>
 						)}
 					</div>
@@ -144,75 +135,50 @@ const ListingCard: React.FC<ListingCardProps> = ({
 					</div>
 				</div>
 
-				<div className="flex flex-row items-center justify-start gap-[6px]">
-					<div className=" flex flex-row items-center justify-start">
-						{data.breakfast ? (
+				<div className="flex flex-row items-center justify-start ">
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.breakfast && (
 							<div className="flex flex-row items-center justify-center gap-1">
 								<span className="text-green-700">Breakfast </span>
 								<FaBreadSlice style={{ color: "green" }} />
 							</div>
-						) : (
+						)}
+					</div>
+
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.lunch && (
 							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-red-700">No Breakfast </span>
-								<FaBreadSlice style={{ color: "red" }} />
+								<span className="text-green-700">Lunch </span>
+								<GiMeal style={{ color: "green" }} />
 							</div>
 						)}
 					</div>
 
-					<div className=" flex flex-row items-center justify-start">
-						{data.lunch ? (
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.dinner && (
 							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-green-700">lunch </span>
+								<span className="text-green-700">Dinner </span>
 								<GiMeal style={{ color: "green" }} />
-							</div>
-						) : (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-red-700">No lunch </span>
-								<MdNoMeals style={{ color: "red" }} />
-							</div>
-						)}
-					</div>
-
-					<div className=" flex flex-row items-center justify-start">
-						{data.dinner ? (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-green-700">dinner </span>
-								<GiMeal style={{ color: "green" }} />
-							</div>
-						) : (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-red-700">No dinner </span>
-								<MdNoMeals style={{ color: "red" }} />
 							</div>
 						)}
 					</div>
 				</div>
 
-				<div className="flex flex-row items-center justify-start gap-8">
-					<div className=" flex flex-row items-center justify-start">
-						{data.sightseeing ? (
+				<div className="flex flex-row items-center justify-start">
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.sightseeing && (
 							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-green-700">sightseeing </span>
+								<span className="text-green-700">Sightseeing </span>
 								<FaBinoculars style={{ color: "green" }} />
-							</div>
-						) : (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-red-700">No sightseeing </span>
-								<FaBinoculars style={{ color: "red" }} />
 							</div>
 						)}
 					</div>
 
-					<div className=" flex flex-row items-center justify-start">
-						{data.transfers ? (
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.transfers && (
 							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-green-700">transfers </span>
+								<span className="text-green-700">Transfers </span>
 								<MdOutlineDirectionsBusFilled style={{ color: "green" }} />
-							</div>
-						) : (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-red-700">No transfers </span>
-								<MdBusAlert style={{ color: "red" }} />
 							</div>
 						)}
 					</div>
