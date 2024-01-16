@@ -21,8 +21,8 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 	currentUser,
 }) => {
 	const category = useMemo(() => {
-		return catagories.find((item) => item.label === listing.catagory);
-	}, [listing.catagory]);
+		return catagories.find((item) => item.label === listing.category);
+	}, [listing.category]);
 	return (
 		<Container>
 			<div className="mx-auto max-w-screen-lg">

@@ -16,6 +16,7 @@ export async function POST(request: Request) {
 		category,
 		packageName,
 		destination,
+		description,
 		citiesCovered,
 		departureCity,
 		nights,
@@ -32,18 +33,25 @@ export async function POST(request: Request) {
 		emi,
 		emiMonths,
 		keyHighlights,
-		itenary,
+		itinerary,
 		inclusions,
 		exclusions,
 		tnc,
 		imageSrc,
-
 	} = body;
+
+	// let keyHighlightInput:string[] = 
+	
+	console.log(
+keyHighlights.forEach((elem:string[]) => {Object.values(elem)}
+	))
+	
 
 	const listing = await prisma.listing.create({
 		data: {
-			catagory: category,
+			category: category,
 			packageName,
+			description,
 			destination: destination.label,
 			citiesCovered,
 			departureCity,
@@ -51,7 +59,7 @@ export async function POST(request: Request) {
 			days,
 			flights: JSON.parse(flights),
 			visaRequired: JSON.parse(visaRequired),
-			hotelStar:parseInt(hotelStar,10),
+			hotelStar: parseInt(hotelStar, 10),
 			breakfast: JSON.parse(breakfast),
 			lunch: JSON.parse(lunch),
 			dinner: JSON.parse(dinner),
@@ -59,10 +67,16 @@ export async function POST(request: Request) {
 			transfers: JSON.parse(transfers),
 			price: parseInt(price, 10),
 			emi: JSON.parse(emi),
-			emiMonths:parseInt(emiMonths,10),
-			keyHighlights,
-			itenary,
-			inclusions,
+			emiMonths: parseInt(emiMonths, 10),
+			// keyHighlights: 
+				
+			// ),
+			// itinerary: {
+			// 	title: "no title",
+			// 	narration: [","],
+			// 	inclusion: [","],
+			// },
+			
 			exclusions,
 			tnc,
 			imageSrc,

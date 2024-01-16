@@ -5,6 +5,8 @@ import { SafeUser } from "@/app/types";
 import { IconType } from "react-icons";
 import Avatar from "@/app/components/Avatar";
 import ListingCategory from "./LisitingCategory";
+import { FaStar } from "react-icons/fa";
+import dynamic from "next/dynamic";
 
 interface LisitingInfoProps {
 	user: SafeUser;
@@ -20,7 +22,12 @@ interface LisitingInfoProps {
 	nights: number;
 	locactionValue: string;
 	id?: string;
+	flights?: boolean;
+	visaRequired?:boolean
+	hotelStar?:number
 }
+
+const Map= dynamic(()=>import('../Map'),{ssr:false})
 
 const ListingInfo: React.FC<LisitingInfoProps> = ({
 	user,
@@ -29,12 +36,15 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 	days,
 	nights,
 	locactionValue,
+	flights,
+	visaRequired,
+	hotelStar,
 	id,
 }) => {
 	const { getByValue } = useCountries();
 
 	const coordinates = getByValue(locactionValue)?.latlng;
-
+	console.log(flights)
 	return (
 		<div className="col-span-4 flex flex-col gap-8">
 			<div className="flex flex-col gap-2">
@@ -45,6 +55,24 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 				<div className="flex flex-row items-center gap-4 font-light text-neutral-500">
 					<div>{nights} Nights</div>
 					<div>{days} Days</div>
+					<div>
+						{" "}
+						<FaStar size={20} />
+						{hotelStar}
+					</div>
+				</div>
+				<hr />
+				<div className="flex flex-row items-center gap-4 font-light text-neutral-500">
+					{flights ? (
+						<div>Flights Included</div>
+					) : (
+						<div>Flights NOT Included</div>
+					)}
+					{visaRequired ? (
+						<div>Visa Fees Included</div>
+					) : (
+						<div>Visa Fees NOT Included</div>
+					)}
 				</div>
 				<hr />
 				{category && (
@@ -54,8 +82,12 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 						description={category?.description}
 					/>
 				)}
-    <hr />
+				<hr />
+				<div className="text-lg font-light text-neutral-500">{description}</div>
+				<hr />
+					<Map center={coordinates} />
 			</div>
+			
 		</div>
 	);
 };

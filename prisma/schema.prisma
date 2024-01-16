@@ -18,11 +18,11 @@ model User {
   emailVerified  DateTime?
   image          String?
   review         String?
+  rating         Int?
   hashedPassword String?
-
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  favoriteIds String[] @db.ObjectId
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  favoriteIds    String[]  @db.ObjectId
 
   accounts     Account[]
   listings     Listing[]
@@ -49,8 +49,9 @@ model Account {
 }
 
 model Listing {
-  id            String   @id @default(auto()) @map("_id") @db.ObjectId
-  packageName   String
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  packageName String
+  description String
   destination   String
   citiesCovered String
   departureCity String
@@ -67,20 +68,34 @@ model Listing {
   price         Int
   emi           Boolean?
   emiMonths     Int?
-  keyHighlights String?
-  itenary       String?
-  inclusions    String?
-  exclusions    String?
-  tnc           String?
+  keyHighlights String[]
+  veg           Boolean?
+  nonVeg        Boolean?
+  jainVeg       Boolean?
+  hotel         String?
+  itinerary     Itinerary[]
+  
+  exclusions    String[]
+  tnc           String[]
   imageSrc      String
-  createdAt     DateTime @default(now())
+  createdAt     DateTime    @default(now())
   category      String
   locationValue String
-  userId        String   @db.ObjectId
+  userId        String      @db.ObjectId
   review        String?
+  rating        Int?
 
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   reservations Reservation[]
+}
+
+model Itinerary {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  narration String[]
+  inclusion String[]
+  listingId String   @db.ObjectId
+  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
 model Reservation {

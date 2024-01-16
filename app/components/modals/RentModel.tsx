@@ -1,10 +1,17 @@
 "use client";
 
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import {
+	FieldValues,
+	SubmitHandler,
+	useForm,
+	useFieldArray,
+} from "react-hook-form";
 import useRentModal from "@/app/hooks/useRentModel";
 import Modal from "./Modal";
+// import {DevTool} from '@hookform/devtools'
 
 import { useMemo, useState } from "react";
+import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
 import Heading from "@/app/components/Heading";
 import { catagories } from "@/app/components/navbar/Catagories";
 import CategoryInput from "@/app/components/inputs/CategoryInput";
@@ -18,13 +25,53 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
+interface FormProps {
+	packageName: string;
+	description: string;
+	destination: string;
+	citiesCovered: string;
+	departureCity: string;
+	nights: number;
+	days: number;
+	flights?: boolean;
+	visaRequired?: boolean;
+	hotelStar: number;
+	breakfast?: boolean;
+	lunch?: boolean;
+	dinner?: boolean;
+	sightseeing?: boolean;
+	transfers?: boolean;
+	price: number;
+	emi?: boolean;
+	emiMonths?: number;
+	keyHighlights:  {highlight:string}[];
+	veg?: boolean;
+	nonVeg?: boolean;
+	jainVeg?: boolean;
+	hotel?: string;
+	itinerary: {
+		title: string;
+		narration: {narr:string}[];
+		inclusion: {incl:string}[];
+	};
+	exclusions: {excl:string}[];
+	tnc: {t:string}[];
+	imageSrc?: string;
+	category: string;
+	locationValue?: string;
+	review?: string;
+	rating?: number;
+	userId?:string
+}
+
 enum STEPS {
 	CATEGORY = 0,
 	LOCATION = 1,
-	INFO = 3,
-	IMAGES = 2,
-	DESCRIPTION = 4,
-	PRICE = 5,
+	IMAGES = 3,
+	INFO = 4,
+	DESCRIPTION = 5,
+	KEYHIGHLIGHTS = 2,
+	PRICE = 6,
 }
 
 const RentModal = () => {
@@ -37,10 +84,11 @@ const RentModal = () => {
 		register,
 		handleSubmit,
 		setValue,
+		control,
 		watch,
 		formState: { errors },
 		reset,
-	} = useForm<FieldValues>({
+	} = useForm<FormProps| FieldValues>({
 		defaultValues: {
 			// packageName: "",
 			// destination: "",
@@ -48,6 +96,7 @@ const RentModal = () => {
 
 			packageName: "",
 			destination: "",
+			description: "none",
 			citiesCovered: "",
 			departureCity: "",
 			nights: 1,
@@ -63,15 +112,18 @@ const RentModal = () => {
 			price: 1,
 			emi: false,
 			emiMonths: 1,
+			itinerary: {
+				title: "untitled",
+				narration: [{ narr: "" }],
+				inclusion: [{ incl: "" }],
+			},
+			keyHighlights: [{ highlight: "" }],
 
-			keyHighlights: "",
-			itenary: "",
-			inclusions: "",
-			exclusions: "",
-			tnc: "",
+			exclusions: [{ excl: "" }],
+			tnc: [{ t: "" }],
 			imageSrc: "",
-			createdAt: "",
-			catagory: "",
+
+			category: "",
 			locationValue: "",
 			userId: "",
 		},
@@ -82,7 +134,13 @@ const RentModal = () => {
 	const nights = watch("nights");
 	const days = watch("days");
 	const imageSrc = watch("imageSrc");
-	const itenary = watch("itenary");
+
+	const { fields, append, remove } = useFieldArray({
+		name: "keyHighlights",
+		control,
+	});
+
+	console.log( register);
 
 	const Map = useMemo(
 		() => dynamic(() => import("@/app/components/Map"), { ssr: false }),
@@ -90,11 +148,6 @@ const RentModal = () => {
 		[destination]
 	);
 
-	const Editor = useMemo(
-		() => dynamic(() => import("@/app/components/editor"), { ssr: false }),
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-		[itenary]
-	);
 	const setCustomValue = (id: string, value: any) => {
 		setValue(id, value, {
 			shouldValidate: true,
@@ -167,6 +220,36 @@ const RentModal = () => {
 			</div>
 		</div>
 	);
+
+	if (step === STEPS.KEYHIGHLIGHTS) {
+		
+		bodyContent = (
+			<div className="flex flex-col gap-5">
+				<Heading title="Enter Key Highlights" />
+
+				<div className="flex flex-col gap-2">
+					{fields.map((field, index) => {
+						return (
+							<div className="flex flex-row gap-2" key={field.id}>
+								<input
+									type="text"
+									{...register(`keyHighlights.${index}.highlight`)}
+								/>
+								{index >= 0 && (
+									<button onClick={() => remove(index)}>
+										<CiCircleMinus size={18} />
+									</button>
+								)}
+							</div>
+						);
+					})}
+					<button onClick={() => append({ highlight: "" })}>
+						<CiCirclePlus size={18} />
+					</button>
+				</div>
+			</div>
+		);
+	}
 
 	if (step === STEPS.LOCATION) {
 		bodyContent = (
@@ -414,43 +497,32 @@ const RentModal = () => {
 
 				<hr />
 				<div className=" flex flex-row gap-1 ">
+				
 					<Input
-						id="keyHighlights"
-						label="keyHighlights"
+						id="description"
+						label="description"
 						disabled={isLoading}
 						register={register}
 						errors={errors}
 						required
 					/>
 
-					<Input
-						id="itenary"
-						label="itenary"
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-						required
-					/>
-
-					{/* <Editor /> */}
+				
+			
 				</div>
 				<hr />
-				<div className=" flex flex-col gap-1 ">
-					<Input
-						id="inclusions"
-						label="inclusions"
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-						required
-					/>
+				<div
+					className=" flex flex-c
+				ol gap-1 "
+				>
+					
 					<Input
 						id="exclusions"
 						label="exclusions"
 						disabled={isLoading}
 						register={register}
 						errors={errors}
-						required
+						
 					/>
 
 					<Input
@@ -459,7 +531,7 @@ const RentModal = () => {
 						disabled={isLoading}
 						register={register}
 						errors={errors}
-						required
+						
 					/>
 				</div>
 			</div>
@@ -525,7 +597,9 @@ const RentModal = () => {
 			body={bodyContent}
 			secondaryActionLabel={secondaryActionLabel}
 			secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
+			
 		/>
+			// <DevTool />
 	);
 };
 
