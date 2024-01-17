@@ -44,24 +44,24 @@ interface FormProps {
 	price: number;
 	emi?: boolean;
 	emiMonths?: number;
-	keyHighlights:  {highlight:string}[];
+	keyHighlights: { highlight: string }[];
 	veg?: boolean;
 	nonVeg?: boolean;
 	jainVeg?: boolean;
 	hotel?: string;
 	itinerary: {
 		title: string;
-		narration: {narr:string}[];
-		inclusion: {incl:string}[];
+		narration: { narr: string }[];
+		inclusion: { incl: string }[];
 	};
-	exclusions: {excl:string}[];
-	tnc: {t:string}[];
+	exclusions: { excl: string }[];
+	tnc: { t: string }[];
 	imageSrc?: string;
 	category: string;
 	locationValue?: string;
 	review?: string;
 	rating?: number;
-	userId?:string
+	userId?: string;
 }
 
 enum STEPS {
@@ -88,7 +88,7 @@ const RentModal = () => {
 		watch,
 		formState: { errors },
 		reset,
-	} = useForm<FormProps| FieldValues>({
+	} = useForm<FormProps | FieldValues>({
 		defaultValues: {
 			// packageName: "",
 			// destination: "",
@@ -140,7 +140,7 @@ const RentModal = () => {
 		control,
 	});
 
-	console.log( register);
+	console.log(fields);
 
 	const Map = useMemo(
 		() => dynamic(() => import("@/app/components/Map"), { ssr: false }),
@@ -222,7 +222,6 @@ const RentModal = () => {
 	);
 
 	if (step === STEPS.KEYHIGHLIGHTS) {
-		
 		bodyContent = (
 			<div className="flex flex-col gap-5">
 				<Heading title="Enter Key Highlights" />
@@ -411,7 +410,7 @@ const RentModal = () => {
 							<input
 								{...register("sightseeing", { required: true })}
 								type="radio"
-								value="false"
+								value="{false}"
 							/>
 						</div>
 					</div>
@@ -497,7 +496,6 @@ const RentModal = () => {
 
 				<hr />
 				<div className=" flex flex-row gap-1 ">
-				
 					<Input
 						id="description"
 						label="description"
@@ -506,23 +504,18 @@ const RentModal = () => {
 						errors={errors}
 						required
 					/>
-
-				
-			
 				</div>
 				<hr />
 				<div
 					className=" flex flex-c
 				ol gap-1 "
 				>
-					
 					<Input
 						id="exclusions"
 						label="exclusions"
 						disabled={isLoading}
 						register={register}
 						errors={errors}
-						
 					/>
 
 					<Input
@@ -531,7 +524,6 @@ const RentModal = () => {
 						disabled={isLoading}
 						register={register}
 						errors={errors}
-						
 					/>
 				</div>
 			</div>
@@ -597,9 +589,8 @@ const RentModal = () => {
 			body={bodyContent}
 			secondaryActionLabel={secondaryActionLabel}
 			secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
-			
 		/>
-			// <DevTool />
+		// <DevTool />
 	);
 };
 

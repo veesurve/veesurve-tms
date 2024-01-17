@@ -23,11 +23,11 @@ interface LisitingInfoProps {
 	locactionValue: string;
 	id?: string;
 	flights?: boolean;
-	visaRequired?:boolean
-	hotelStar?:number
+	visaRequired?: boolean;
+	hotelStar?: number;
 }
 
-const Map= dynamic(()=>import('../Map'),{ssr:false})
+const Map = dynamic(() => import("../Map"), { ssr: false });
 
 const ListingInfo: React.FC<LisitingInfoProps> = ({
 	user,
@@ -44,7 +44,7 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 	const { getByValue } = useCountries();
 
 	const coordinates = getByValue(locactionValue)?.latlng;
-	console.log(flights)
+	// console.log(flights)
 	return (
 		<div className="col-span-4 flex flex-col gap-8">
 			<div className="flex flex-col gap-2">
@@ -85,9 +85,8 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 				<hr />
 				<div className="text-lg font-light text-neutral-500">{description}</div>
 				<hr />
-					<Map center={coordinates} />
+				<Map center={coordinates} />
 			</div>
-			
 		</div>
 	);
 };
