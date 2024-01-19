@@ -4,9 +4,11 @@ import Container from "@/app/components/Container";
 import ListingInfo from "@/app/components/listings/LisitingInfo";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingReservation from "@/app/components/listings/ListingReservation";
+import Modal from "@/app/components/modals/Modal";
 
 import { catagories } from "@/app/components/navbar/Catagories";
 import useLoginModal from "@/app/hooks/useLoginModel";
+import usePhModel from "@/app/hooks/usePhModel";
 // import useLoginModal2 from "@/app/hooks/useLoginModel2";
 
 import { SafeListings, SafeUser } from "@/app/types";
@@ -39,6 +41,7 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 	reservations = [],
 }) => {
 	const loginModel = useLoginModal();
+	const phoneModel = usePhModel();
 	const router = useRouter();
 
 	const disableDates = useMemo(() => {
@@ -65,6 +68,9 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 		}
 
 		setIsLoading(true);
+		if (!currentUser?.phone) {
+			return phoneModel.onOpen();
+		}
 
 		axios
 			.post("/api/reservations", {
@@ -85,7 +91,15 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 			.finally(() => {
 				setIsLoading(false);
 			});
-	}, [totalPrice, dateRange, listing?.id, router, currentUser, loginModel]);
+	}, [
+		totalPrice,
+		dateRange,
+		listing?.id,
+		router,
+		currentUser,
+		loginModel,
+		phoneModel,
+	]);
 
 	useEffect(() => {
 		if (dateRange.startDate && dateRange.endDate) {
@@ -94,8 +108,8 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 				dateRange.startDate
 			);
 
-			if (dayCount && listing.price) {
-				setTotalPrice(dayCount * listing.price);
+			if (dayCount >= listing.days) {
+				setTotalPrice(listing.price + 0.01);
 			} else {
 				setTotalPrice(listing.price);
 			}

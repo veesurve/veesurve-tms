@@ -10,7 +10,6 @@ export async function POST(request: Request) {
 	}
 
 	const body = await request.json();
-	// console.log(body);
 
 	const {
 		category,
@@ -27,25 +26,39 @@ export async function POST(request: Request) {
 		breakfast,
 		lunch,
 		dinner,
+		veg,
+		nonVeg,
+		jainVeg,
 		sightseeing,
 		transfers,
+		hotel,
 		price,
 		emi,
 		emiMonths,
 		keyHighlights,
-		itinerary,
-		inclusions,
+		// itinerary,
+		// inclusions,
 		exclusions,
 		tnc,
 		imageSrc,
 	} = body;
 
-	// let keyHighlightInput:string[] = 
-	
-	console.log(
-keyHighlights.forEach((elem:string[]) => {Object.values(elem)}
-	))
-	
+	// let keyHighlightInput:string[] =
+
+	const iti = {
+		title: "untitled",
+		narration: ["1", "2"],
+		inclusion: ["1", "2"],
+	};
+
+	const changeBool = (value: string) => {
+		if (value === "true") {
+			return true;
+		}
+		if (value === "false") {
+			return false;
+		}
+	};
 
 	const listing = await prisma.listing.create({
 		data: {
@@ -57,29 +70,28 @@ keyHighlights.forEach((elem:string[]) => {Object.values(elem)}
 			departureCity,
 			nights,
 			days,
-			flights: JSON.parse(flights),
-			visaRequired: JSON.parse(visaRequired),
+			// flights: JSON.parse(flights),
+			flights: changeBool(flights),
+
+			visaRequired: changeBool(visaRequired),
 			hotelStar: parseInt(hotelStar, 10),
-			breakfast: JSON.parse(breakfast),
-			lunch: JSON.parse(lunch),
-			dinner: JSON.parse(dinner),
-			sightseeing: JSON.parse(sightseeing),
-			transfers: JSON.parse(transfers),
-			price: parseInt(price, 10),
-			emi: JSON.parse(emi),
-			emiMonths: parseInt(emiMonths, 10),
-			// keyHighlights: 
-				
-			// ),
-			// itinerary: {
-			// 	title: "no title",
-			// 	narration: [","],
-			// 	inclusion: [","],
-			// },
-			
+			breakfast: changeBool(breakfast),
+			lunch: changeBool(lunch),
+			dinner: changeBool(dinner),
+			sightseeing: changeBool(sightseeing),
+			veg: changeBool(veg),
+			nonVeg: changeBool(nonVeg),
+			jainVeg: changeBool(jainVeg),
+			transfers: changeBool(transfers),
+			price:parseInt(price, 10),
+			emi: changeBool(emi),
+			emiMonths:parseInt(emiMonths,10),
+			keyHighlights,
+			itinerary: iti,
 			exclusions,
 			tnc,
 			imageSrc,
+			hotel,
 			locationValue: destination.value,
 			userId: currentUser.id,
 		},

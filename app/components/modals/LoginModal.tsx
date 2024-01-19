@@ -33,7 +33,7 @@ const LoginModal = () => {
 		defaultValues: {
 			email: "",
 			password: "",
-			phone: "",
+			// phone: "",
 		},
 	});
 
@@ -76,14 +76,14 @@ const LoginModal = () => {
 				errors={errors}
 				required
 			/>
-			<Input
+			{/* <Input
 				id="phone"
 				label="Phone"
 				disabled={isLoading}
 				register={register}
 				errors={errors}
 				required
-			/>
+			/> */}
 
 			<Input
 				id="password"

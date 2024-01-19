@@ -25,7 +25,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-interface FormProps {
+export interface FormProps extends FieldValues {
 	packageName: string;
 	description: string;
 	destination: string;
@@ -67,14 +67,17 @@ interface FormProps {
 enum STEPS {
 	CATEGORY = 0,
 	LOCATION = 1,
-	IMAGES = 3,
-	INFO = 4,
-	DESCRIPTION = 5,
 	KEYHIGHLIGHTS = 2,
-	PRICE = 6,
+	EXCLUSIONS = 3,
+	TNC = 4,
+	// ITINERARY = 5,
+	IMAGES = 5,
+	INFO = 6,
+	DESCRIPTION = 7,
+	PRICE = 8,
 }
 
-const RentModal = () => {
+const RentModal: React.FC<FormProps> = () => {
 	const router = useRouter();
 	const rentModal = useRentModal();
 	const [step, setStep] = useState(STEPS.CATEGORY);
@@ -88,15 +91,11 @@ const RentModal = () => {
 		watch,
 		formState: { errors },
 		reset,
-	} = useForm<FormProps | FieldValues>({
+	} = useForm<FormProps>({
 		defaultValues: {
-			// packageName: "",
-			// destination: "",
-			// citiesCovered: null,
-
 			packageName: "",
 			destination: "",
-			description: "none",
+			description: "",
 			citiesCovered: "",
 			departureCity: "",
 			nights: 1,
@@ -107,20 +106,26 @@ const RentModal = () => {
 			breakfast: false,
 			lunch: false,
 			dinner: false,
+			veg: false,
+			nonVeg: false,
+			jainVeg: false,
 			sightseeing: false,
 			transfers: false,
 			price: 1,
 			emi: false,
 			emiMonths: 1,
-			itinerary: {
-				title: "untitled",
-				narration: [{ narr: "" }],
-				inclusion: [{ incl: "" }],
-			},
-			keyHighlights: [{ highlight: "" }],
+			hotel: "",
+			// itinerary?: [
+			// 	{
+			// 		title: "untitled",
+			// 		narration: [{ narr: "1" }],
+			// 		inclusion: [{ incl: "1" }],
+			// 	},
+			// ],
+			keyHighlights: [{ highlight: "1" }],
 
-			exclusions: [{ excl: "" }],
-			tnc: [{ t: "" }],
+			exclusions: [{ excl: "1" }],
+			tnc: [{ t: "1" }],
 			imageSrc: "",
 
 			category: "",
@@ -135,12 +140,39 @@ const RentModal = () => {
 	const days = watch("days");
 	const imageSrc = watch("imageSrc");
 
-	const { fields, append, remove } = useFieldArray({
+	const {
+		fields: keyFields,
+		append: keyAppend,
+		remove: keyRemove,
+	} = useFieldArray({
 		name: "keyHighlights",
 		control,
 	});
 
-	console.log(fields);
+	const {
+		fields: exclFields,
+		append: exclAppend,
+		remove: exclRemove,
+	} = useFieldArray({
+		name: "exclusions",
+		control,
+	});
+	const {
+		fields: itineraryFields,
+		append: itineraryAppend,
+		remove: itineraryRemove,
+	} = useFieldArray({
+		name: "itinerary",
+		control,
+	});
+	const {
+		fields: tncFields,
+		append: tncAppend,
+		remove: tncRemove,
+	} = useFieldArray({
+		name: "tnc",
+		control,
+	});
 
 	const Map = useMemo(
 		() => dynamic(() => import("@/app/components/Map"), { ssr: false }),
@@ -148,7 +180,7 @@ const RentModal = () => {
 		[destination]
 	);
 
-	const setCustomValue = (id: string, value: any) => {
+	const setCustomValue = (id: any, value: any) => {
 		setValue(id, value, {
 			shouldValidate: true,
 			shouldDirty: true,
@@ -162,20 +194,25 @@ const RentModal = () => {
 		setStep((value) => value + 1);
 	};
 
-	const onSubmit: SubmitHandler<FieldValues> = (data) => {
-		if (step !== STEPS.PRICE) {
-			return onNext();
-		}
+	const onSubmit: SubmitHandler<FormProps> = (data: FormProps) => {
+		if (step !== STEPS.PRICE) return onNext();
 
 		setIsLoading(true);
+		const payload = {
+			...data,
+			keyHighlights: data.keyHighlights.map((k) => k.highlight),
+			exclusions: data.exclusions.map((k) => k.excl),
+			tnc: data.tnc.map((k) => k.t),
+		};
 		axios
-			.post("/api/listings", data)
+			.post("/api/listings", payload)
 			.then(() => {
 				toast.success("Lisiting Created");
 				router.refresh();
 				reset();
 				setStep(STEPS.CATEGORY);
 				rentModal.onClose();
+				console.log(payload);
 			})
 			.catch(() => {
 				toast.error("something went wrong");
@@ -227,7 +264,7 @@ const RentModal = () => {
 				<Heading title="Enter Key Highlights" />
 
 				<div className="flex flex-col gap-2">
-					{fields.map((field, index) => {
+					{keyFields.map((field, index) => {
 						return (
 							<div className="flex flex-row gap-2" key={field.id}>
 								<input
@@ -235,20 +272,109 @@ const RentModal = () => {
 									{...register(`keyHighlights.${index}.highlight`)}
 								/>
 								{index >= 0 && (
-									<button onClick={() => remove(index)}>
+									<button onClick={() => keyRemove(index)}>
 										<CiCircleMinus size={18} />
 									</button>
 								)}
 							</div>
 						);
 					})}
-					<button onClick={() => append({ highlight: "" })}>
+					<button onClick={() => keyAppend({ highlight: "" })}>
+						Add
 						<CiCirclePlus size={18} />
 					</button>
 				</div>
 			</div>
 		);
 	}
+
+	if (step === STEPS.EXCLUSIONS) {
+		bodyContent = (
+			<div className="flex flex-col gap-5">
+				<Heading title="Enter exclusions" />
+
+				<div className="flex flex-col gap-2">
+					{exclFields.map((field, index) => {
+						return (
+							<div className="flex flex-row gap-2" key={field.id}>
+								<input type="text" {...register(`exclusions.${index}.excl`)} />
+								{index >= 0 && (
+									<button onClick={() => exclRemove(index)}>
+										<CiCircleMinus size={18} />
+									</button>
+								)}
+							</div>
+						);
+					})}
+					<button onClick={() => exclAppend({ excl: "" })}>
+						Add
+						<CiCirclePlus size={18} />
+					</button>
+				</div>
+			</div>
+		);
+	}
+
+	if (step === STEPS.TNC) {
+		bodyContent = (
+			<div className="flex flex-col gap-5">
+				<Heading title="Enter Terms & Conditon" />
+
+				<div className="flex flex-col gap-2">
+					{tncFields.map((field, index) => {
+						return (
+							<div className="flex flex-row gap-2" key={field.id}>
+								<input type="text" {...register(`tnc.${index}.t`)} />
+								{index >= 0 && (
+									<button onClick={() => tncRemove(index)}>
+										<CiCircleMinus size={18} />
+									</button>
+								)}
+							</div>
+						);
+					})}
+					<button onClick={() => tncAppend({ t: "" })}>
+						Add
+						<CiCirclePlus size={18} />
+					</button>
+				</div>
+			</div>
+		);
+	}
+
+	// if (step === STEPS.ITINERARY) {
+	// 	bodyContent = (
+	// 		<div className="flex flex-col gap-5">
+	// 			<Heading title="Enter itinerary" />
+
+	// 			<div className="flex flex-col gap-2">
+	// 				{itineraryFields.map((field, index) => {
+	// 					return (
+	// 						<div className="flex flex-row gap-2" key={field.id}>
+	// 							<input type="text" {...register(`itinerary.${index}.title`)} />
+	// 							{field?.map((narr,narindex)=>{
+	// 								return (
+	// 									<div className="flex flex-row gap-2" key={narr.id}>
+	// 							<input type="text" {...register(`narration.${narindex}.narr`)} />
+	// 									</div>
+	// 								)
+	// 							})}
+	// 							{index >= 0 && (
+	// 								<button onClick={() => itineraryRemove(index)}>
+	// 									<CiCircleMinus size={18} />
+	// 								</button>
+	// 							)}
+	// 						</div>
+	// 					);
+	// 				})}
+	// 				<button onClick={() => tncAppend({ t: "" })}>
+	// 					Add
+	// 					<CiCirclePlus size={18} />
+	// 				</button>
+	// 			</div>
+	// 		</div>
+	// 	);
+	// }
 
 	if (step === STEPS.LOCATION) {
 		bodyContent = (
@@ -261,7 +387,7 @@ const RentModal = () => {
 					value={destination}
 					onChange={(value) => setCustomValue("destination", value)}
 				/>
-				<Map center={destination?.latlng} />
+				<Map center={destination?.latlng as const} />
 			</div>
 		);
 	}
@@ -284,115 +410,285 @@ const RentModal = () => {
 					onChange={(value) => setCustomValue("days", value)}
 				/>
 				<hr />
-				<div className="flex flex-row items-center justify-evenly gap-2">
-					<div className="">
-						<label>Hotel Star Rating: </label>
-						<select {...register("hotelStar", { required: true })}>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							<option value="4">4</option>
-							<option value="5">5</option>
-						</select>
-					</div>
-					{/*START yes no input filds */}
-					<div className="flex flex-col items-center justify-center gap-2">
-						<h1>Flights</h1>
-						<div className=" flex flex-row gap-4">
-							<label>Yes</label>
-							<input
-								{...register("flights", { required: true })}
-								type="radio"
-								value={"true"}
-							/>
-							<label>No</label>
-							<input
-								{...register("flights", { required: true })}
-								type="radio"
-								value="false"
-							/>
+				<div
+					id="wrapper"
+					className="flex flex-row items-center justify-around gap-2 "
+				>
+					<div
+						id="first"
+						className="flex flex-col items-center justify-evenly gap-2 "
+					>
+						<div className="flex flex-col items-center justify-evenly gap-2">
+							<div className="">
+								<label>Hotel Star Rating: </label>
+								<select {...register("hotelStar", { required: true })}>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+									<option value="4">4</option>
+									<option value="5">5</option>
+								</select>
+							</div>
+							{/*START yes no input filds */}
+							<div className="flex flex-col items-center justify-center gap-2">
+								<h1>Flights</h1>
+								<div className=" flex flex-row gap-4">
+									<label>Yes</label>
+									<input
+										{...register("flights", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="true"
+									/>
+									<label>No</label>
+									<input
+										{...register("flights", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="false"
+									/>
+								</div>
+							</div>
+							{/*END yes no input filds */}
+							{/*START yes no input filds */}
+							<div className="flex flex-col items-center justify-center gap-2">
+								<h1>Visa Included</h1>
+								<div className=" flex flex-row gap-4">
+									<label>Yes</label>
+									<input
+										{...register("visaRequired", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="true"
+									/>
+									<label>No</label>
+									<input
+										{...register("visaRequired", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="false"
+									/>
+								</div>
+							</div>
+							{/*END yes no input filds */}
 						</div>
 					</div>
-					{/*END yes no input filds */}
-					{/*START yes no input filds */}
-					<div className="flex flex-col items-center justify-center gap-2">
-						<h1>Visa Included</h1>
-						<div className=" flex flex-row gap-4">
-							<label>Yes</label>
-							<input
-								{...register("visaRequired", { required: true })}
-								type="radio"
-								value={"true"}
-							/>
-							<label>No</label>
-							<input
-								{...register("visaRequired", { required: true })}
-								type="radio"
-								value="false"
-							/>
+					<hr />
+					<div id="second">
+						<div className="flex flex-col items-center justify-evenly gap-2 ">
+							{/*START yes no input filds */}
+							<div className="flex flex-col items-center justify-center gap-2">
+								<h1>Breakfast?</h1>
+								<div className=" flex flex-row gap-4">
+									<label>Yes</label>
+									<input
+										{...register("breakfast", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="true"
+									/>
+									<label>No</label>
+									<input
+										{...register("breakfast", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="false"
+									/>
+								</div>
+							</div>
+							{/*END yes no input filds */}
+							{/*START yes no input filds */}
+							<div className="flex flex-col items-center justify-center gap-2">
+								<h1>Lunch?</h1>
+								<div className=" flex flex-row gap-4">
+									<label>Yes</label>
+									<input
+										{...register("lunch", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="true"
+									/>
+									<label>No</label>
+									<input
+										{...register("lunch", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="false"
+									/>
+								</div>
+							</div>
+							{/*END yes no input filds */}
+							{/*START yes no input filds */}
+							<div className="flex flex-col items-center justify-center gap-2">
+								<h1>Dinner?</h1>
+								<div className=" flex flex-row gap-4">
+									<label>Yes</label>
+									<input
+										{...register("dinner", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="true"
+									/>
+									<label>No</label>
+									<input
+										{...register("dinner", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="false"
+									/>
+								</div>
+							</div>
+							{/*END yes no input filds */}
 						</div>
 					</div>
-					{/*END yes no input filds */}
-				</div>
-				<hr />
-				<div className="flex flex-row items-center justify-evenly gap-2">
-					{/*START yes no input filds */}
-					<div className="flex flex-col items-center justify-center gap-2">
-						<h1>Breakfast?</h1>
-						<div className=" flex flex-row gap-4">
-							<label>Yes</label>
-							<input
-								{...register("breakfast", { required: true })}
-								type="radio"
-								value={"true"}
-							/>
-							<label>No</label>
-							<input
-								{...register("breakfast", { required: true })}
-								type="radio"
-								value="false"
-							/>
+
+					<div id="third">
+						<div className="flex flex-col items-center justify-evenly gap-2 ">
+							{/*START yes no input filds */}
+							<div className="flex flex-col items-center justify-center gap-2">
+								<h1>Vegitarian?</h1>
+								<div className=" flex flex-row gap-4">
+									<label>Yes</label>
+									<input
+										{...register("veg", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="true"
+									/>
+									<label>No</label>
+									<input
+										{...register("veg", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="false"
+									/>
+								</div>
+							</div>
+							{/*END yes no input filds */}
+							{/*START yes no input filds */}
+							<div className="flex flex-col items-center justify-center gap-2">
+								<h1>Non-Vegitarian?</h1>
+								<div className=" flex flex-row gap-4">
+									<label>Yes</label>
+									<input
+										{...register("nonVeg", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="true"
+									/>
+									<label>No</label>
+									<input
+										{...register("nonVeg", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="false"
+									/>
+								</div>
+							</div>
+							{/*END yes no input filds */}
+							{/*START yes no input filds */}
+							<div className="flex flex-col items-center justify-center gap-2">
+								<h1>Jain-Vegitarian?</h1>
+								<div className=" flex flex-row gap-4">
+									<label>Yes</label>
+									<input
+										{...register("jainVeg", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="true"
+									/>
+									<label>No</label>
+									<input
+										{...register("jainVeg", {
+											required: true,
+											setValueAs: (value: string) =>
+												value === "true"
+													? true || value === "false"
+													: false || value,
+										})}
+										type="radio"
+										value="false"
+									/>
+								</div>
+							</div>
+							{/*END yes no input filds */}
 						</div>
 					</div>
-					{/*END yes no input filds */}
-					{/*START yes no input filds */}
-					<div className="flex flex-col items-center justify-center gap-2">
-						<h1>Lunch?</h1>
-						<div className=" flex flex-row gap-4">
-							<label>Yes</label>
-							<input
-								{...register("lunch", { required: true })}
-								type="radio"
-								value={"true"}
-							/>
-							<label>No</label>
-							<input
-								{...register("lunch", { required: true })}
-								type="radio"
-								value="false"
-							/>
-						</div>
-					</div>
-					{/*END yes no input filds */}
-					{/*START yes no input filds */}
-					<div className="flex flex-col items-center justify-center gap-2">
-						<h1>Dinner?</h1>
-						<div className=" flex flex-row gap-4">
-							<label>Yes</label>
-							<input
-								{...register("dinner", { required: true })}
-								type="radio"
-								value={"true"}
-							/>
-							<label>No</label>
-							<input
-								{...register("dinner", { required: true })}
-								type="radio"
-								value="false"
-							/>
-						</div>
-					</div>
-					{/*END yes no input filds */}
 				</div>
 				<hr />
 				<div className="flex flex-row items-center justify-evenly gap-2">
@@ -402,13 +698,25 @@ const RentModal = () => {
 						<div className=" flex flex-row gap-4">
 							<label>Yes</label>
 							<input
-								{...register("sightseeing", { required: true })}
+								{...register("sightseeing", {
+									required: true,
+									setValueAs: (value: string) =>
+										value === "true"
+											? true || value === "false"
+											: false || value,
+								})}
 								type="radio"
-								value={"true"}
+								value="true"
 							/>
 							<label>No</label>
 							<input
-								{...register("sightseeing", { required: true })}
+								{...register("sightseeing", {
+									required: true,
+									setValueAs: (value: string) =>
+										value === "true"
+											? true || value === "false"
+											: false || value,
+								})}
 								type="radio"
 								value="{false}"
 							/>
@@ -421,13 +729,25 @@ const RentModal = () => {
 						<div className=" flex flex-row gap-4">
 							<label>Yes</label>
 							<input
-								{...register("transfers", { required: true })}
+								{...register("transfers", {
+									required: true,
+									setValueAs: (value: string) =>
+										value === "true"
+											? true || value === "false"
+											: false || value,
+								})}
 								type="radio"
-								value={"true"}
+								value="true"
 							/>
 							<label>No</label>
 							<input
-								{...register("transfers", { required: true })}
+								{...register("transfers", {
+									required: true,
+									setValueAs: (value: string) =>
+										value === "true"
+											? true || value === "false"
+											: false || value,
+								})}
 								type="radio"
 								value="false"
 							/>
@@ -464,17 +784,9 @@ const RentModal = () => {
 						errors={errors}
 						required
 					/>
-					{/* <Input
-						id="destination"
-						label="destination"
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-						required
-					/> */}
 				</div>
 				<hr />
-				<div className=" flex flex-row gap-1 ">
+				<div className=" flex flex-col gap-1 ">
 					<Input
 						id="departureCity"
 						label="departureCity"
@@ -487,6 +799,14 @@ const RentModal = () => {
 					<Input
 						id="citiesCovered"
 						label="citiesCovered"
+						disabled={isLoading}
+						register={register}
+						errors={errors}
+						required
+					/>
+					<Input
+						id="hotel"
+						label="Hotel"
 						disabled={isLoading}
 						register={register}
 						errors={errors}
@@ -509,23 +829,7 @@ const RentModal = () => {
 				<div
 					className=" flex flex-c
 				ol gap-1 "
-				>
-					<Input
-						id="exclusions"
-						label="exclusions"
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-					/>
-
-					<Input
-						id="tnc"
-						label="tnc"
-						disabled={isLoading}
-						register={register}
-						errors={errors}
-					/>
-				</div>
+				></div>
 			</div>
 		);
 	}
@@ -551,13 +855,25 @@ const RentModal = () => {
 						<div className=" flex flex-row gap-4">
 							<label>Yes</label>
 							<input
-								{...register("emi", { required: true })}
+								{...register("emi", {
+									required: true,
+									setValueAs: (value: string) =>
+										value === "true"
+											? true || value === "false"
+											: false || value,
+								})}
 								type="radio"
-								value={"true"}
+								value="true"
 							/>
 							<label>No</label>
 							<input
-								{...register("emi", { required: true })}
+								{...register("emi", {
+									required: true,
+									setValueAs: (value: string) =>
+										value === "true"
+											? true || value === "false"
+											: false || value,
+								})}
 								type="radio"
 								value="false"
 							/>

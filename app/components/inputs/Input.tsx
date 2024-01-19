@@ -3,14 +3,14 @@
 import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form";
 import { BiRupee } from "react-icons/bi";
 
-interface InputProps {
+interface InputProps<FV extends FieldValues = FieldValues> {
 	id: string;
 	label: string;
 	type?: string;
 	disabled?: boolean;
 	formatPrice?: boolean;
 	required?: boolean;
-	register: UseFormRegister<FieldValues>;
+	register: UseFormRegister<FV>;
 	errors: FieldErrors;
 }
 
@@ -50,7 +50,7 @@ const Input: React.FC<InputProps> = ({
    peer-placeholder-shown:translate-y-0
    peer-focus:scale-75
    peer-focus:-translate-y-4
-   ${errors[id] ? 'text-rose-500':'text-zinc-400'}
+   ${errors[id] ? "text-rose-500" : "text-zinc-400"}
    
    `}
 			>

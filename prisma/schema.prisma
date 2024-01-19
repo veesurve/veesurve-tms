@@ -49,9 +49,9 @@ model Account {
 }
 
 model Listing {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  packageName String
-  description String
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  packageName   String
+  description   String
   destination   String
   citiesCovered String
   departureCity String
@@ -73,15 +73,14 @@ model Listing {
   nonVeg        Boolean?
   jainVeg       Boolean?
   hotel         String?
-  itinerary     Itinerary[]
-  
+  itinerary     Itinerary?
   exclusions    String[]
   tnc           String[]
   imageSrc      String
-  createdAt     DateTime    @default(now())
+  createdAt     DateTime   @default(now())
   category      String
   locationValue String
-  userId        String      @db.ObjectId
+  userId        String     @db.ObjectId
   review        String?
   rating        Int?
 
@@ -89,13 +88,10 @@ model Listing {
   reservations Reservation[]
 }
 
-model Itinerary {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+type Itinerary {
   title     String
   narration String[]
   inclusion String[]
-  listingId String   @db.ObjectId
-  listing   Listing  @relation(fields: [listingId], references: [id], onDelete: Cascade)
 }
 
 model Reservation {

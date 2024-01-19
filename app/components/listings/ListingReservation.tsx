@@ -1,32 +1,33 @@
-"use client"
-import {Range} from 'react-date-range'
-import Calender from '@/app/components/inputs/Calender'
-import Button from '../Button'
-interface ListingReservationProps{
- price:number
- dateRange: Range
- totalPrice:number
- onChangeDate:(value:Range)=> void
- onSubmit:()=> void
- disabled?:boolean
- disabledDates : Date[]
+"use client";
+import { Range } from "react-date-range";
+import Calender from "@/app/components/inputs/Calender";
+import Button from "../Button";
+interface ListingReservationProps {
+	price: number;
+	dateRange: Range;
+	totalPrice: number;
+	onChangeDate: (value: Range) => void;
+	onSubmit: () => void;
+	disabled?: boolean;
+	disabledDates: Date[];
 }
 
-
-const ListingReservation:React.FC<ListingReservationProps> = ({
- price,
- dateRange,
- totalPrice,
- onChangeDate,
- onSubmit,
- disabled,
- disabledDates
+const ListingReservation: React.FC<ListingReservationProps> = ({
+	price,
+	dateRange,
+	totalPrice,
+	onChangeDate,
+	onSubmit,
+	disabled,
+	disabledDates,
 }) => {
- let INR = new Intl.NumberFormat("en-IN", {
+	let INR = new Intl.NumberFormat("en-IN", {
 		style: "currency",
 		currency: "INR",
- });
- return (
+	});
+
+	
+	return (
 		<div className="bg-white rounded-xl border-[1px] border-neutral-200 overflow-hidden">
 			<div className="flex flex-row items-center gap-1 p-4">
 				<div className="text-2xl font-semibold">{INR.format(price)}</div>
@@ -39,18 +40,15 @@ const ListingReservation:React.FC<ListingReservationProps> = ({
 				onChange={(value) => onChangeDate(value.selection)}
 			/>
 			<hr />
-   <div className="p-4">
-    <Button
-    disabled={disabled}
-    label='Reserve'
-    onClick={onSubmit}
-    />
-   </div>
+			{/*insert input for phone number here */}
+			<div className="p-4">
+				<Button disabled={disabled} label="Reserve" onClick={onSubmit} />
+			</div>
 			<div className="p-4 flex flex-row items-center justify-center font-semibold text-lg">
 				{INR.format(totalPrice)}
 			</div>
 		</div>
- );
-}
- 
+	);
+};
+
 export default ListingReservation;

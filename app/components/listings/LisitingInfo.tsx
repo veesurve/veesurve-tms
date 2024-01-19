@@ -91,4 +91,6 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 	);
 };
 
+
+
 export default ListingInfo;

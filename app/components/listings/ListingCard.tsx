@@ -12,7 +12,11 @@ import Button from "@/app/components/Button";
 
 import dynamic from "next/dynamic";
 
-import { MdFlight, MdNightlight, MdOutlineDirectionsBusFilled } from "react-icons/md";
+import {
+	MdFlight,
+	MdNightlight,
+	MdOutlineDirectionsBusFilled,
+} from "react-icons/md";
 import { FaStar, FaSun, FaBreadSlice, FaBinoculars } from "react-icons/fa";
 import { BsFillBuildingsFill } from "react-icons/bs";
 import { GiMeal } from "react-icons/gi";
@@ -98,7 +102,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 					{location?.region}, {location?.label}
 				</div>
 				<div className="font-light text-neutral-500">
-					{reservationDate || data.catagory}
+					{reservationDate || data.category}
 				</div>
 				<div className="font-semibold text-neutral-500 uppercase">
 					{data.citiesCovered}
