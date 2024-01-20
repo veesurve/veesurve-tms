@@ -24,6 +24,7 @@ import Input from "@/app/components/inputs/Input";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import NestedModal from "./NestedModal";
 
 export interface FormProps extends FieldValues {
 	packageName: string;
@@ -53,7 +54,7 @@ export interface FormProps extends FieldValues {
 		title: string;
 		narration: { narr: string }[];
 		inclusion: { incl: string }[];
-	};
+	}[];
 	exclusions: { excl: string }[];
 	tnc: { t: string }[];
 	imageSrc?: string;
@@ -70,11 +71,11 @@ enum STEPS {
 	KEYHIGHLIGHTS = 2,
 	EXCLUSIONS = 3,
 	TNC = 4,
-	// ITINERARY = 5,
-	IMAGES = 5,
-	INFO = 6,
-	DESCRIPTION = 7,
-	PRICE = 8,
+	ITINERARY = 5,
+	IMAGES = 6,
+	INFO = 7,
+	DESCRIPTION = 8,
+	PRICE = 9,
 }
 
 const RentModal: React.FC<FormProps> = () => {
@@ -115,13 +116,13 @@ const RentModal: React.FC<FormProps> = () => {
 			emi: false,
 			emiMonths: 1,
 			hotel: "",
-			// itinerary?: [
-			// 	{
-			// 		title: "untitled",
-			// 		narration: [{ narr: "1" }],
-			// 		inclusion: [{ incl: "1" }],
-			// 	},
-			// ],
+			itinerary: [
+				{
+					title: "untitled",
+					narration: [{ narr: "1" }],
+					inclusion: [{ incl: "1" }],
+				},
+			],
 			keyHighlights: [{ highlight: "1" }],
 
 			exclusions: [{ excl: "1" }],
@@ -202,6 +203,11 @@ const RentModal: React.FC<FormProps> = () => {
 			...data,
 			keyHighlights: data.keyHighlights.map((k) => k.highlight),
 			exclusions: data.exclusions.map((k) => k.excl),
+			itinerary: data.itinerary.map((i) => ({
+				title: i.title,
+				narration: i.narration.map((n) => n.narr),
+				inclusion: i.inclusion.map((t) => t.incl),
+			})),
 			tnc: data.tnc.map((k) => k.t),
 		};
 		axios
@@ -342,39 +348,79 @@ const RentModal: React.FC<FormProps> = () => {
 		);
 	}
 
-	// if (step === STEPS.ITINERARY) {
-	// 	bodyContent = (
-	// 		<div className="flex flex-col gap-5">
-	// 			<Heading title="Enter itinerary" />
+	if (step === STEPS.ITINERARY) {
+		bodyContent = (
+			<div className="flex flex-col gap-5">
+				<Heading title="Enter itinerary" />
 
-	// 			<div className="flex flex-col gap-2">
-	// 				{itineraryFields.map((field, index) => {
-	// 					return (
-	// 						<div className="flex flex-row gap-2" key={field.id}>
-	// 							<input type="text" {...register(`itinerary.${index}.title`)} />
-	// 							{field?.map((narr,narindex)=>{
-	// 								return (
-	// 									<div className="flex flex-row gap-2" key={narr.id}>
-	// 							<input type="text" {...register(`narration.${narindex}.narr`)} />
-	// 									</div>
-	// 								)
-	// 							})}
-	// 							{index >= 0 && (
-	// 								<button onClick={() => itineraryRemove(index)}>
-	// 									<CiCircleMinus size={18} />
-	// 								</button>
-	// 							)}
-	// 						</div>
-	// 					);
-	// 				})}
-	// 				<button onClick={() => tncAppend({ t: "" })}>
-	// 					Add
-	// 					<CiCirclePlus size={18} />
-	// 				</button>
-	// 			</div>
-	// 		</div>
-	// 	);
-	// }
+				<div className="flex flex-col gap-2">
+					{itineraryFields.map((field, index) => {
+						return (
+							<div className="flex flex-col gap-2" key={field.id}>
+								add title
+								<input type="text" {...register(`itinerary.${index}.title`)} />
+								<div className="flex flex-col">
+									add narrations
+									<NestedModal
+										parent="itinerary"
+										nestIndex={index}
+										control={control}
+										register={register}
+										nestArray="narration"
+										nestKey="narr"
+									/>
+								</div>
+								{/* {field?.map((narr, narindex) => {
+									return (
+										<div className="flex flex-row gap-2" key={narr.id}>
+											<input
+												type="text"
+												{...register(`narration.${narindex}.narr`)}
+											/>
+										</div>
+									);
+								})} */}
+								{/* {index >= 0 && (
+									<button onClick={() => itineraryRemove(index)}>
+										<CiCircleMinus size={18} />
+									</button>
+								)} */}
+								<div className="flex flex-col">
+									<NestedModal
+										parent="itinerary"
+										nestIndex={index}
+										control={control}
+										register={register}
+										nestArray="inclusion"
+										nestKey="incl"
+									/>
+								</div>
+								{index > 0 && (
+									<button onClick={() => itineraryRemove(index)}>
+										{" "}
+										remove
+										<CiCircleMinus size={18} />
+									</button>
+								)}
+							</div>
+						);
+					})}
+					<button
+						onClick={() =>
+							itineraryAppend({
+								title: "untitled",
+								narration: [{ narr: "1" }],
+								inclusion: [{ incl: "1" }],
+							})
+						}
+					>
+						Add
+						<CiCirclePlus size={18} />
+					</button>
+				</div>
+			</div>
+		);
+	}
 
 	if (step === STEPS.LOCATION) {
 		bodyContent = (

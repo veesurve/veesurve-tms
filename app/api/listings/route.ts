@@ -36,7 +36,7 @@ export async function POST(request: Request) {
 		emi,
 		emiMonths,
 		keyHighlights,
-		// itinerary,
+		itinerary,
 		// inclusions,
 		exclusions,
 		tnc,
@@ -45,11 +45,11 @@ export async function POST(request: Request) {
 
 	// let keyHighlightInput:string[] =
 
-	const iti = {
-		title: "untitled",
-		narration: ["1", "2"],
-		inclusion: ["1", "2"],
-	};
+	// const iti = {
+	// 	title: "untitled",
+	// 	narration: ["1", "2"],
+	// 	inclusion: ["1", "2"],
+	// };
 
 	const changeBool = (value: string) => {
 		if (value === "true") {
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
 			emi: changeBool(emi),
 			emiMonths:parseInt(emiMonths,10),
 			keyHighlights,
-			itinerary: iti,
+			itinerary,
 			exclusions,
 			tnc,
 			imageSrc,

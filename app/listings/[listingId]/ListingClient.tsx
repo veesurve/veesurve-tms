@@ -11,8 +11,8 @@ import useLoginModal from "@/app/hooks/useLoginModel";
 import usePhModel from "@/app/hooks/usePhModel";
 // import useLoginModal2 from "@/app/hooks/useLoginModel2";
 
-import { SafeListings, SafeUser } from "@/app/types";
-import { Reservation } from "@prisma/client";
+import { SafeListings, SafeUser, safeReservations } from "@/app/types";
+
 import axios from "axios";
 
 import { differenceInCalendarDays, eachDayOfInterval } from "date-fns";
@@ -28,7 +28,7 @@ const initialDateRange = {
 };
 
 interface ListingClientProps {
-	reservations?: Reservation[];
+	reservations?: safeReservations[];
 	listing: SafeListings & {
 		user: SafeUser;
 	};
@@ -68,29 +68,58 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 		}
 
 		setIsLoading(true);
-		if (!currentUser?.phone) {
-			return phoneModel.onOpen();
-		}
 
-		axios
-			.post("/api/reservations", {
-				totalPrice,
-				startDate: dateRange.startDate,
-				endDate: dateRange.endDate,
-				listingId: listing?.id,
-			})
-			.then(() => {
-				toast.success("Reserved");
-				setDateRange(initialDateRange);
-				// redirect to trips
-				router.refresh();
-			})
-			.catch(() => {
-				toast.error("Something went wrong");
-			})
-			.finally(() => {
-				setIsLoading(false);
-			});
+		if (!currentUser?.phone) {
+			try {
+				let request = () => phoneModel.isOpen;
+				request();
+				toast.success("Success");
+			} catch (error) {
+				toast.error("Something went wrong.");
+			} finally {
+				axios
+					.post("/api/reservations", {
+						totalPrice,
+						startDate: dateRange.startDate,
+						endDate: dateRange.endDate,
+						listingId: listing?.id,
+					})
+					.then(() => {
+						toast.success("Reserved");
+						setDateRange(initialDateRange);
+						// redirect to trips
+						router.refresh();
+					})
+					.catch(() => {
+						toast.error("Something went wrong");
+					})
+					.finally(() => {
+						setIsLoading(false);
+					});
+			}
+
+		
+		} else {
+			axios
+				.post("/api/reservations", {
+					totalPrice,
+					startDate: dateRange.startDate,
+					endDate: dateRange.endDate,
+					listingId: listing?.id,
+				})
+				.then(() => {
+					toast.success("Reserved");
+					setDateRange(initialDateRange);
+					// redirect to trips
+					router.refresh();
+				})
+				.catch(() => {
+					toast.error("Something went wrong");
+				})
+				.finally(() => {
+					setIsLoading(false);
+				});
+		}
 	}, [
 		totalPrice,
 		dateRange,
@@ -138,6 +167,8 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 							days={listing.days}
 							nights={listing.nights}
 							locactionValue={listing.locationValue}
+							flights={listing.flights}
+							visaRequired={listing.visaRequired}
 							id={listing.id}
 						/>
 						<div className="order-first mb-10 md:order-last md:col-span-3">

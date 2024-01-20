@@ -24,7 +24,7 @@ const PhoneModel = () => {
 
 	const onSubmit: SubmitHandler<FieldValues> = (data) => {
 		setIsLoading(true);
-
+		
 		axios
 			.post("/api/update", data)
 			.then(() => {
