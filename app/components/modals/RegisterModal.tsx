@@ -14,13 +14,13 @@ import useLoginModal from "@/app/hooks/useLoginModel";
 import Modal from "./Modal";
 import Heading from "@/app/components/Heading";
 import Input from "@/app/components/inputs/Input";
-import {toast} from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Button from "@/app/components/Button";
 import { signIn } from "next-auth/react";
 
 const RegisterModal = () => {
 	const registerModal = useRegisterModal();
-	const loginModal =useLoginModal()
+	const loginModal = useLoginModal();
 	const [isLoading, setIsLoading] = useState(false);
 
 	const {
@@ -31,7 +31,7 @@ const RegisterModal = () => {
 		defaultValues: {
 			name: "",
 			email: "",
-			password: "",
+			phone: 0,
 		},
 	});
 
@@ -41,6 +41,7 @@ const RegisterModal = () => {
 		axios
 			.post("/api/register", data)
 			.then(() => {
+				loginModal.onOpen();
 				registerModal.onClose();
 			})
 			.catch((error) => {
@@ -50,24 +51,16 @@ const RegisterModal = () => {
 				setIsLoading(false);
 			});
 	};
-		const toggle = useCallback(() => {
-			registerModal.onClose();
-			loginModal.onOpen();
-		}, [loginModal, registerModal]);
+	const toggle = useCallback(() => {
+		registerModal.onClose();
+		loginModal.onOpen();
+	}, [loginModal, registerModal]);
 
 	const bodyContent = (
 		<div className="flex flex-col gap-3">
 			<Heading
 				title="Welcome to VeeSurve Experiances"
 				subtitle="Create an Account!"
-			/>
-			<Input
-				id="email"
-				label="Email"
-				disabled={isLoading}
-				register={register}
-				errors={errors}
-				required
 			/>
 			<Input
 				id="name"
@@ -78,9 +71,17 @@ const RegisterModal = () => {
 				required
 			/>
 			<Input
-				id="password"
-				label="Password"
-				type="password"
+				id="email"
+				label="Email"
+				disabled={isLoading}
+				register={register}
+				errors={errors}
+				required
+			/>
+			<Input
+				id="phone"
+				label="Phone Number"
+				type="number"
 				disabled={isLoading}
 				register={register}
 				errors={errors}
@@ -88,40 +89,40 @@ const RegisterModal = () => {
 			/>
 		</div>
 	);
-	const footerContent = (
-		<div className="flex flex-col gap-2 mt-3">
-			<hr />
-			<Button
-				outline
-				label="Continue with Google"
-				icon={FcGoogle}
-				onClick={() => signIn("google")}
-			/>
-			{/* <Button
-				outline
-				label="Continue with Facebook"
-				icon={AiFillFacebook}
-				onClick={() => signIn('facebook')} 
-			/>*/}
-			<Button
-				outline
-				label="Continue with Github"
-				icon={AiFillGithub}
-				onClick={() => signIn("github")}
-			/>
-			<div className="text-neutral-500  text-center mt-4 font-light">
-				<div className="flex flex-row items-center justify-center gap-2">
-					<div>Already have an account?</div>
-					<div
-						className=" text-neutral-800 cursor-pointer hover:underline"
-						onClick={toggle}
-					>
-						Log in
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+	// const footerContent = (
+	// 	<div className="flex flex-col gap-2 mt-3">
+	// 		<hr />
+	// 		<Button
+	// 			outline
+	// 			label="Continue with Google"
+	// 			icon={FcGoogle}
+	// 			onClick={() => signIn("google")}
+	// 		/>
+	// 		{/* <Button
+	// 			outline
+	// 			label="Continue with Facebook"
+	// 			icon={AiFillFacebook}
+	// 			onClick={() => signIn('facebook')}
+	// 		/>*/}
+	// 		<Button
+	// 			outline
+	// 			label="Continue with Github"
+	// 			icon={AiFillGithub}
+	// 			onClick={() => signIn("github")}
+	// 		/>
+	// 		<div className="text-neutral-500  text-center mt-4 font-light">
+	// 			<div className="flex flex-row items-center justify-center gap-2">
+	// 				<div>Already have an account?</div>
+	// 				<div
+	// 					className=" text-neutral-800 cursor-pointer hover:underline"
+	// 					onClick={toggle}
+	// 				>
+	// 					Log in
+	// 				</div>
+	// 			</div>
+	// 		</div>
+	// 	</div>
+	// );
 
 	return (
 		<Modal
@@ -132,7 +133,7 @@ const RegisterModal = () => {
 			onClose={registerModal.onClose}
 			onSubmit={handleSubmit(onSubmit)}
 			body={bodyContent}
-			footer={footerContent}
+			// footer={footerContent}
 		/>
 	);
 };

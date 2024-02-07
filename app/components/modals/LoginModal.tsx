@@ -87,8 +87,8 @@ const LoginModal = () => {
 
 			<Input
 				id="password"
-				label="Password"
-				type="password"
+				label="Phone"
+				type="number"
 				disabled={isLoading}
 				register={register}
 				errors={errors}
@@ -96,40 +96,40 @@ const LoginModal = () => {
 			/>
 		</div>
 	);
-	const footerContent = (
-		<div className="flex flex-col gap-2 mt-3">
-			<hr />
-			<Button
-				outline
-				label="Continue with Google"
-				icon={FcGoogle}
-				onClick={() => signIn("google")}
-			/>
-			{/* <Button
-				outline
-				label="Continue with Facebook"
-				icon={AiFillFacebook}
-				onClick={() => signIn("facebook")}
-			/> */}
-			<Button
-				outline
-				label="Continue with Github"
-				icon={AiFillGithub}
-				onClick={() => signIn("github")}
-			/>
-			<div className="text-neutral-500  text-center mt-4 font-light">
-				<div className="flex flex-row items-center justify-center gap-2">
-					<div>Don`&apos;t have an account?</div>
-					<div
-						className=" text-neutral-800 cursor-pointer hover:underline"
-						onClick={toggle}
-					>
-						Create an Account
-					</div>
-				</div>
-			</div>
-		</div>
-	);
+	// const footerContent = (
+	// 	<div className="flex flex-col gap-2 mt-3">
+	// 		<hr />
+	// 		<Button
+	// 			outline
+	// 			label="Continue with Google"
+	// 			icon={FcGoogle}
+	// 			onClick={() => signIn("google")}
+	// 		/>
+	// 		{/* <Button
+	// 			outline
+	// 			label="Continue with Facebook"
+	// 			icon={AiFillFacebook}
+	// 			onClick={() => signIn("facebook")}
+	// 		/> */}
+	// 		<Button
+	// 			outline
+	// 			label="Continue with Github"
+	// 			icon={AiFillGithub}
+	// 			onClick={() => signIn("github")}
+	// 		/>
+	// 		<div className="text-neutral-500  text-center mt-4 font-light">
+	// 			<div className="flex flex-row items-center justify-center gap-2">
+	// 				<div>Don`&apos;t have an account?</div>
+	// 				<div
+	// 					className=" text-neutral-800 cursor-pointer hover:underline"
+	// 					onClick={toggle}
+	// 				>
+	// 					Create an Account
+	// 				</div>
+	// 			</div>
+	// 		</div>
+	// 	</div>
+	// );
 
 	return (
 		<Modal
@@ -140,7 +140,7 @@ const LoginModal = () => {
 			onClose={loginModal.onClose}
 			onSubmit={handleSubmit(onSubmit)}
 			body={bodyContent}
-			footer={footerContent}
+			// footer={footerContent}
 		/>
 	);
 };

@@ -8,8 +8,9 @@ import { SafeListings } from "./types";
 export default async function Home() {
 	const listings = await getListings();
 	const currentUser = await getCurrentUser();
+	console.log(listings);
 
-	const isEmpty = true;
+	// const isEmpty = true;
 	if (listings.length === 0) {
 		return (
 			<div>
@@ -26,6 +27,8 @@ export default async function Home() {
 							currentUser={currentUser}
 							key={listing.id}
 							data={listing}
+							userDetails
+							reservationDetails
 						/>
 					);
 				})}

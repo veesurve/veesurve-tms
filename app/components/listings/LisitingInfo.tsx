@@ -22,8 +22,8 @@ interface LisitingInfoProps {
 	nights: number;
 	locactionValue: string;
 	id?: string;
-	flights?: boolean;
-	visaRequired?: boolean;
+	flights?: boolean | undefined;
+	visaRequired?: boolean | undefined;
 	hotelStar?: number;
 }
 
@@ -90,7 +90,5 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 		</div>
 	);
 };
-
-
 
 export default ListingInfo;

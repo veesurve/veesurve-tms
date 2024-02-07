@@ -10,12 +10,14 @@ import useRentModal from "@/app/hooks/useRentModel";
 
 import { signOut } from "next-auth/react";
 import { SafeUser } from "@/app/types";
+import { useRouter } from "next/navigation";
 
 interface UserMenuProps {
 	currentUser?: SafeUser | null;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
+	const router = useRouter();
 	const registerModal = useRegisterModal();
 	const loginModal = useLoginModal();
 	const rentModal = useRentModal();
@@ -37,7 +39,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 		<div className="relative">
 			<div className="flex flex-row items-center gap-3">
 				{/* hard code for veesurve */}
-				{currentUser?.email  && (
+				{currentUser?.email && (
 					<div
 						onClick={onRent}
 						className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
@@ -60,12 +62,24 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 					<div className="flex flex-col cursor-pointer">
 						{currentUser ? (
 							<>
-								<MenuItem onClick={() => {}} label="My Trips" />
+								<MenuItem
+									onClick={() => router.push("/trips")}
+									label="My Trips"
+								/>
 								<MenuItem onClick={() => {}} label="My Favorites" />
-								<MenuItem onClick={() => {}} label="My Reservations" />
+
+								{/* {currentUser?.email === "veesurveevm@gmail.com" ||
+									currentUser?.email === "abkslesforce@gmail.com" && ( */}
+
+								{currentUser?.email && (
+									<MenuItem
+										onClick={() => router.push("/reservations")}
+										label="My Reservations"
+									/>
+								)}
 								<MenuItem onClick={() => {}} label="My Properties" />
 
-								{currentUser?.email === "veesurveevm@gmail.com" && (
+								{currentUser?.email === "veesurveetms@gmail.com" && (
 									<MenuItem onClick={rentModal.onOpen} label="Rent" />
 								)}
 								<hr />

@@ -92,7 +92,7 @@ const RentModal: React.FC<FormProps> = () => {
 		watch,
 		formState: { errors },
 		reset,
-	} = useForm<FormProps>({
+	} = useForm<FormProps | FieldValues>({
 		defaultValues: {
 			packageName: "",
 			destination: "",
@@ -433,7 +433,7 @@ const RentModal: React.FC<FormProps> = () => {
 					value={destination}
 					onChange={(value) => setCustomValue("destination", value)}
 				/>
-				<Map center={destination?.latlng as const} />
+				<Map center={destination?.latlng } />
 			</div>
 		);
 	}

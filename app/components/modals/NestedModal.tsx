@@ -1,5 +1,5 @@
 import React from "react";
-import { useFieldArray} from "react-hook-form";
+import { useFieldArray } from "react-hook-form";
 import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
 
 const NestedModal = ({
@@ -10,10 +10,10 @@ const NestedModal = ({
 	nestArray,
 	nestKey,
 }) => {
- const name= `${parent}.${nestIndex}.${nestArray}`
+	const name = `${parent}.${nestIndex}.${nestArray}`;
 	const { fields, remove, append } = useFieldArray({
 		control,
-		 name,
+		name,
 	});
 	return (
 		<div>

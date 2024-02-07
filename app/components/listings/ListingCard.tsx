@@ -1,8 +1,8 @@
 "use client";
 
 import useCountries from "@/app/hooks/useCountries";
-import { SafeListings, SafeUser } from "@/app/types";
-import { Listing, Reservation } from "@prisma/client";
+import { SafeListings, SafeUser, safeReservations } from "@/app/types";
+// import { Listing, Reservation } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useCallback, useMemo } from "react";
 import { format } from "date-fns";
@@ -10,7 +10,7 @@ import Image from "next/image";
 import HeartButton from "@/app/components/HeartButton";
 import Button from "@/app/components/Button";
 
-import dynamic from "next/dynamic";
+// import dynamic from "next/dynamic";
 
 import {
 	MdFlight,
@@ -24,12 +24,14 @@ import { TbBrandVisa } from "react-icons/tb";
 
 interface ListingCardProps {
 	data: SafeListings;
-	reservation?: Reservation;
+	reservation?: safeReservations;
 	onAction?: (id: string) => void;
 	disabled?: boolean;
 	actionLabel?: string;
 	actionId?: string;
 	currentUser?: SafeUser | null;
+	userDetails?: boolean;
+	reservationDetails?: boolean;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
@@ -40,6 +42,8 @@ const ListingCard: React.FC<ListingCardProps> = ({
 	actionLabel,
 	actionId = "",
 	currentUser,
+	userDetails,
+	reservationDetails,
 }) => {
 	const router = useRouter();
 	const { getByValue } = useCountries();
@@ -83,7 +87,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 			onClick={() => router.push(`/listings/${data.id}`)}
 			className="col-span-1 cursor-pointer group"
 		>
-			<div className="flex flex-col gap-2 w-full border rounded-lg border-neutral-400">
+			<div className="flex flex-col gap-2 w-full  rounded-lg ">
 				<div className="w-full aspect-square relative overflow-hidden rounded-xl">
 					<Image
 						fill
@@ -192,6 +196,33 @@ const ListingCard: React.FC<ListingCardProps> = ({
 						{INR.format(price)}
 					</div>
 					{!reservation && <div className="font-light">Per Person</div>}
+				</div>
+
+				<div className="font-semibold flex items-start justify-center">
+					{userDetails && (
+						<div className="font-semibold flex flex-row gap-1 justify-between">
+							<div>{currentUser?.name}</div>
+							<div>{currentUser?.phone}</div>
+							<div>{currentUser?.email}</div>
+						</div>
+					)}
+				</div>
+				<div className="font-semibold flex items-start justify-center flex-col">
+					{reservationDetails && reservation && (
+						<>
+							<div className="font-semibold flex flex-row gap-1 justify-between">
+								<div>Adult:{reservation?.adult}</div>
+								<div>Kids:{reservation?.kid}</div>
+								<div>Baby:{reservation?.baby}</div>
+							</div>
+
+							<div>
+								{reservation.isArchived && (
+									<p className="text-red-500">THIS IS CANCELLED</p>
+								)}
+							</div>
+						</>
+					)}
 				</div>
 				{onAction && actionLabel && (
 					<Button

@@ -4,7 +4,6 @@ import Container from "@/app/components/Container";
 import ListingInfo from "@/app/components/listings/LisitingInfo";
 import ListingHead from "@/app/components/listings/ListingHead";
 import ListingReservation from "@/app/components/listings/ListingReservation";
-import Modal from "@/app/components/modals/Modal";
 
 import { catagories } from "@/app/components/navbar/Catagories";
 import useLoginModal from "@/app/hooks/useLoginModel";
@@ -41,7 +40,7 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 	reservations = [],
 }) => {
 	const loginModel = useLoginModal();
-	const phoneModel = usePhModel();
+	// const phoneModel = usePhModel();
 	const router = useRouter();
 
 	const disableDates = useMemo(() => {
@@ -61,65 +60,65 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 	const [isLoading, setIsLoading] = useState(false);
 	const [totalPrice, setTotalPrice] = useState(listing.price);
 	const [dateRange, setDateRange] = useState<Range>(initialDateRange);
+	const [adult, setAdult] = useState(1);
+	const [kid, setKid] = useState(0);
+	const [baby, setBaby] = useState(0);
 
-	const onCreateReservation = useCallback(() => {
+	// const reseravtionCreate = async () => {
+	// 	await axios
+	// 		.post("/api/reservations", {
+	// 			totalPrice,
+	// 			startDate: dateRange.startDate,
+	// 			endDate: dateRange.endDate,
+	// 			listingId: listing?.id,
+	// 		})
+	// 		.then(() => {
+	// 			toast.success("Reserved");
+	// 			setDateRange(initialDateRange);
+	// 			router.push("/trips");
+	// 		})
+	// 		.catch(() => {
+	// 			toast.error("Something went wrong");
+	// 		})
+	// 		.finally(() => {
+	// 			setIsLoading(false);
+	// 		});
+	// };
+
+	const onSubmitButton = useCallback(() => {}, []);
+
+	const onCreateReservation = useCallback(async () => {
 		if (!currentUser) {
 			return loginModel.onOpen();
 		}
 
 		setIsLoading(true);
 
-		if (!currentUser?.phone) {
-			try {
-				let request = () => phoneModel.isOpen;
-				request();
-				toast.success("Success");
-			} catch (error) {
-				toast.error("Something went wrong.");
-			} finally {
-				axios
-					.post("/api/reservations", {
-						totalPrice,
-						startDate: dateRange.startDate,
-						endDate: dateRange.endDate,
-						listingId: listing?.id,
-					})
-					.then(() => {
-						toast.success("Reserved");
-						setDateRange(initialDateRange);
-						// redirect to trips
-						router.refresh();
-					})
-					.catch(() => {
-						toast.error("Something went wrong");
-					})
-					.finally(() => {
-						setIsLoading(false);
-					});
-			}
+		// if (!currentUser.phone) {
+		// 	return phoneModel.onOpen();
+		// }
 
-		
-		} else {
-			axios
-				.post("/api/reservations", {
-					totalPrice,
-					startDate: dateRange.startDate,
-					endDate: dateRange.endDate,
-					listingId: listing?.id,
-				})
-				.then(() => {
-					toast.success("Reserved");
-					setDateRange(initialDateRange);
-					// redirect to trips
-					router.refresh();
-				})
-				.catch(() => {
-					toast.error("Something went wrong");
-				})
-				.finally(() => {
-					setIsLoading(false);
-				});
-		}
+		axios
+			.post("/api/reservations", {
+				totalPrice,
+				startDate: dateRange.startDate,
+				endDate: dateRange.endDate,
+				listingId: listing?.id,
+				adult: adult,
+				kid: kid,
+				baby: baby,
+			})
+			.then(() => {
+				toast.success("Reserved");
+				setDateRange(initialDateRange);
+				router.push("/trips");
+			})
+			.catch(() => {
+				toast.error("Something went wrong");
+			})
+			.finally(() => {
+				setIsLoading(false);
+			});
 	}, [
 		totalPrice,
 		dateRange,
@@ -127,7 +126,10 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 		router,
 		currentUser,
 		loginModel,
-		phoneModel,
+		adult,
+		kid,
+		baby,
+		// phoneModel,
 	]);
 
 	useEffect(() => {
@@ -143,11 +145,12 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 				setTotalPrice(listing.price);
 			}
 		}
-	}, [dateRange, listing.price]);
+	}, [dateRange, listing.price, listing.days]);
 
 	const category = useMemo(() => {
 		return catagories.find((item) => item.label === listing.category);
 	}, [listing.category]);
+
 	return (
 		<Container>
 			<div className="mx-auto max-w-screen-lg">
@@ -163,12 +166,12 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 						<ListingInfo
 							user={listing.user}
 							category={category}
-							description={listing?.citiesCovered} //change to description after new update to db & listing
+							description={listing.description}
 							days={listing.days}
 							nights={listing.nights}
 							locactionValue={listing.locationValue}
-							flights={listing.flights}
-							visaRequired={listing.visaRequired}
+							flights={listing.flights!}
+							visaRequired={listing.visaRequired!}
 							id={listing.id}
 						/>
 						<div className="order-first mb-10 md:order-last md:col-span-3">
@@ -180,6 +183,12 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 								onSubmit={onCreateReservation}
 								disabled={isLoading}
 								disabledDates={disableDates}
+								adult={adult}
+								kid={kid}
+								baby={baby}
+								onChangeAdult={(value) => setAdult(value)}
+								onChangeKid={(value) => setKid(value)}
+								onChangeBaby={(value) => setBaby(value)}
 							/>
 						</div>
 					</div>

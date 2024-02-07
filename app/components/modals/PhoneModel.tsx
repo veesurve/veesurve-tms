@@ -28,6 +28,7 @@ const PhoneModel = () => {
 		axios
 			.post("/api/update", data)
 			.then(() => {
+				
 				phoneModel.onClose();
 			})
 			.catch((error) => {

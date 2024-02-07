@@ -1,4 +1,5 @@
 // This is your Prisma schema file,
+
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -100,7 +101,11 @@ model Reservation {
   listingId  String   @db.ObjectId
   startDate  DateTime
   endDate    DateTime
+  isArchived Boolean?
   totalPrice Int
+  adult      Int
+  kid        Int?
+  baby       Int?
   createdAt  DateTime @default(now())
 
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
