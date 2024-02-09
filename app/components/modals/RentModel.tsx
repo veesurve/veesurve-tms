@@ -218,7 +218,7 @@ const RentModal: React.FC<FormProps> = () => {
 				reset();
 				setStep(STEPS.CATEGORY);
 				rentModal.onClose();
-				console.log(payload);
+				// console.log(payload);
 			})
 			.catch(() => {
 				toast.error("something went wrong");
@@ -269,25 +269,36 @@ const RentModal: React.FC<FormProps> = () => {
 			<div className="flex flex-col gap-5">
 				<Heading title="Enter Key Highlights" />
 
-				<div className="flex flex-col gap-2">
+				<div className="flex flex-col gap-2 ">
 					{keyFields.map((field, index) => {
 						return (
-							<div className="flex flex-row gap-2" key={field.id}>
+							<div
+								className="flex flex-row gap-2 border-2 border-neutral-500 rounded-sm"
+								key={field.id}
+							>
+								<label className=""> Highlight:- {index + 1}</label>
 								<input
+									className=" bg-green-50 flex-1"
 									type="text"
 									{...register(`keyHighlights.${index}.highlight`)}
 								/>
 								{index >= 0 && (
-									<button onClick={() => keyRemove(index)}>
-										<CiCircleMinus size={18} />
+									<button
+										className="flex flex-row justify-between font-semibold items-center hover:text-white hover:bg-red-800 transition rounded-md"
+										onClick={() => keyRemove(index)}
+									>
+										<CiCircleMinus size={18} /> Remove Highlight
 									</button>
 								)}
 							</div>
 						);
 					})}
-					<button onClick={() => keyAppend({ highlight: "" })}>
-						Add
+					<button
+						className="flex flex-row items-center  justify-center font-semibold  bg-neutral-800 text-neutral-200 rounded-md hover:bg-neutral-200 hover:text-neutral-800 transition"
+						onClick={() => keyAppend({ highlight: "" })}
+					>
 						<CiCirclePlus size={18} />
+						Add Highlight
 					</button>
 				</div>
 			</div>
@@ -297,24 +308,38 @@ const RentModal: React.FC<FormProps> = () => {
 	if (step === STEPS.EXCLUSIONS) {
 		bodyContent = (
 			<div className="flex flex-col gap-5">
-				<Heading title="Enter exclusions" />
+				<Heading title="Enter Exclusions" />
 
 				<div className="flex flex-col gap-2">
 					{exclFields.map((field, index) => {
 						return (
-							<div className="flex flex-row gap-2" key={field.id}>
-								<input type="text" {...register(`exclusions.${index}.excl`)} />
+							<div
+								className="flex flex-row gap-2 border-2 border-neutral-500 rounded-sm"
+								key={field.id}
+							>
+								<label className=""> Exclusion:- {index + 1}</label>
+								<input
+									type="text"
+									className=" bg-green-50 flex-1"
+									{...register(`exclusions.${index}.excl`)}
+								/>
 								{index >= 0 && (
-									<button onClick={() => exclRemove(index)}>
-										<CiCircleMinus size={18} />
+									<button
+										className="flex flex-row justify-between font-semibold items-center hover:text-white hover:bg-red-800 transition rounded-md"
+										onClick={() => exclRemove(index)}
+									>
+										<CiCircleMinus size={18} /> Remove Exclusion
 									</button>
 								)}
 							</div>
 						);
 					})}
-					<button onClick={() => exclAppend({ excl: "" })}>
-						Add
+					<button
+						className="flex flex-row items-center  justify-center font-semibold  bg-neutral-800 text-neutral-200 rounded-md hover:bg-neutral-200 hover:text-neutral-800 transition"
+						onClick={() => exclAppend({ excl: "" })}
+					>
 						<CiCirclePlus size={18} />
+						Add Exclusion
 					</button>
 				</div>
 			</div>
@@ -329,19 +354,35 @@ const RentModal: React.FC<FormProps> = () => {
 				<div className="flex flex-col gap-2">
 					{tncFields.map((field, index) => {
 						return (
-							<div className="flex flex-row gap-2" key={field.id}>
-								<input type="text" {...register(`tnc.${index}.t`)} />
+							<div
+								className="flex flex-row gap-2 border-2 border-neutral-500 rounded-sm"
+								key={field.id}
+							>
+								<label className=""> T&C:- {index + 1}</label>
+								<input
+									className=" bg-green-50 flex-1"
+									type="text"
+									{...register(`tnc.${index}.t`)}
+								/>
 								{index >= 0 && (
-									<button onClick={() => tncRemove(index)}>
+									<button
+										className="flex flex-row justify-between font-semibold items-center hover:text-white hover:bg-red-800 transition rounded-md"
+										onClick={() => tncRemove(index)}
+									>
+										{" "}
+										Remove T&C
 										<CiCircleMinus size={18} />
 									</button>
 								)}
 							</div>
 						);
 					})}
-					<button onClick={() => tncAppend({ t: "" })}>
-						Add
+					<button
+						className="flex flex-row items-center  justify-center font-semibold  bg-neutral-800 text-neutral-200 rounded-md hover:bg-neutral-200 hover:text-neutral-800 transition"
+						onClick={() => tncAppend({ t: "" })}
+					>
 						<CiCirclePlus size={18} />
+						Add T&C
 					</button>
 				</div>
 			</div>
@@ -356,11 +397,19 @@ const RentModal: React.FC<FormProps> = () => {
 				<div className="flex flex-col gap-2">
 					{itineraryFields.map((field, index) => {
 						return (
-							<div className="flex flex-col gap-2" key={field.id}>
-								add title
-								<input type="text" {...register(`itinerary.${index}.title`)} />
+							<div
+								className="flex flex-col gap-2 text-neutral-900 border-4 rounded-sm border-neutral-500"
+								key={field.id}
+							>
+								<p className="font-bold">Add Day:{index + 1} Title</p>
+
+								<input
+									className=" bg-green-50 flex-1 border-2 rounded-sm"
+									type="text"
+									{...register(`itinerary.${index}.title`)}
+								/>
 								<div className="flex flex-col">
-									add narrations
+									<p className="font-bold">Add Day:{index + 1} Itinerary</p>
 									<NestedModal
 										parent="itinerary"
 										nestIndex={index}
@@ -370,21 +419,7 @@ const RentModal: React.FC<FormProps> = () => {
 										nestKey="narr"
 									/>
 								</div>
-								{/* {field?.map((narr, narindex) => {
-									return (
-										<div className="flex flex-row gap-2" key={narr.id}>
-											<input
-												type="text"
-												{...register(`narration.${narindex}.narr`)}
-											/>
-										</div>
-									);
-								})} */}
-								{/* {index >= 0 && (
-									<button onClick={() => itineraryRemove(index)}>
-										<CiCircleMinus size={18} />
-									</button>
-								)} */}
+
 								<div className="flex flex-col">
 									<NestedModal
 										parent="itinerary"
@@ -395,10 +430,15 @@ const RentModal: React.FC<FormProps> = () => {
 										nestKey="incl"
 									/>
 								</div>
-								{index > 0 && (
-									<button onClick={() => itineraryRemove(index)}>
+								{index >= 0 && (
+									<button
+										className="flex flex-row justify-center font-semibold items-center border-[1px] border-rose-400 hover:text-white hover:bg-red-800 transition rounded-md capitalize"
+										onClick={() => itineraryRemove(index)}
+									>
 										{" "}
-										remove
+										<p className="font-bold">
+											Remove Day:{index + 1} Itinerary
+										</p>
 										<CiCircleMinus size={18} />
 									</button>
 								)}
@@ -406,6 +446,7 @@ const RentModal: React.FC<FormProps> = () => {
 						);
 					})}
 					<button
+						className="flex flex-row items-center  justify-center font-semibold  bg-neutral-800 text-neutral-200 rounded-md hover:bg-neutral-200 hover:text-neutral-800 transition capitalize"
 						onClick={() =>
 							itineraryAppend({
 								title: "untitled",
@@ -414,8 +455,8 @@ const RentModal: React.FC<FormProps> = () => {
 							})
 						}
 					>
-						Add
 						<CiCirclePlus size={18} />
+						<p className="font-bold"> Add Next Day Itinerary</p>
 					</button>
 				</div>
 			</div>
@@ -433,7 +474,7 @@ const RentModal: React.FC<FormProps> = () => {
 					value={destination}
 					onChange={(value) => setCustomValue("destination", value)}
 				/>
-				<Map center={destination?.latlng } />
+				<Map center={destination?.latlng} />
 			</div>
 		);
 	}
@@ -943,7 +984,7 @@ const RentModal: React.FC<FormProps> = () => {
 	}
 	return (
 		<Modal
-			title="Explore"
+			title="Create Package Listing"
 			onClose={rentModal.onClose}
 			onSubmit={handleSubmit(onSubmit)}
 			isOpen={rentModal.isOpen}

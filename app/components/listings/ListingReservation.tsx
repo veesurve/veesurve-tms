@@ -3,7 +3,7 @@ import { Range } from "react-date-range";
 import { FieldValue, FieldValues, useForm } from "react-hook-form";
 import Calender from "@/app/components/inputs/Calender";
 import Button from "../Button";
-import { InputS } from "@/app/components/navbar/ui/input";
+import { InputS } from "@/app/components/ui/input";
 import { useState } from "react";
 
 interface ListingReservationProps {

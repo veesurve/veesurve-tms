@@ -59,14 +59,17 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 			</div>
 			{isOpen && (
 				<div className="absolute rounded-xl shadow-md w-[40vw] md:w-4/5 bg-white overflow-hidden right-0 top-12 text-sm">
-					<div className="flex flex-col cursor-pointer">
+					<div className="flex flex-col cursor-pointer  justify-start">
 						{currentUser ? (
 							<>
 								<MenuItem
 									onClick={() => router.push("/trips")}
 									label="My Trips"
 								/>
-								<MenuItem onClick={() => {}} label="My Favorites" />
+								<MenuItem
+									onClick={() => router.push("/favorites")}
+									label="My Favorites"
+								/>
 
 								{/* {currentUser?.email === "veesurveevm@gmail.com" ||
 									currentUser?.email === "abkslesforce@gmail.com" && ( */}
@@ -77,7 +80,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 										label="My Reservations"
 									/>
 								)}
-								<MenuItem onClick={() => {}} label="My Properties" />
+								<MenuItem
+									onClick={() => router.push("/properties")}
+									label="My Properties"
+								/>
 
 								{currentUser?.email === "veesurveetms@gmail.com" && (
 									<MenuItem onClick={rentModal.onOpen} label="Rent" />
