@@ -87,7 +87,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 			onClick={() => router.push(`/listings/${data.id}`)}
 			className="col-span-1 cursor-pointer group"
 		>
-			<div className="flex flex-col gap-2 w-full  rounded-lg ">
+			<div className="flex flex-col gap-2 w-full h-[700px] rounded-lg ">
 				<div className="w-full aspect-square relative overflow-hidden rounded-xl">
 					<Image
 						fill
@@ -140,6 +140,30 @@ const ListingCard: React.FC<ListingCardProps> = ({
 						<BsFillBuildingsFill style={{ color: "blue" }} />
 						{data.hotelStar}
 						<FaStar size={12} style={{ color: "blue" }} />
+					</div>
+				</div>
+
+				<div className="flex flex-row items-center justify-start">
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.veg && (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="font-semibold text-green-700">VEG </span>{" "}
+							</div>
+						)}
+					</div>
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.nonVeg && (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="font-semibold text-red-800">Non-VEG </span>{" "}
+							</div>
+						)}
+					</div>
+					<div className=" flex flex-row items-center justify-start mr-2">
+						{data.jainVeg && (
+							<div className="flex flex-row items-center justify-center gap-1">
+								<span className="font-semibold text-green-700">Jain VEG </span>{" "}
+							</div>
+						)}
 					</div>
 				</div>
 

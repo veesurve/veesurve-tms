@@ -173,6 +173,7 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 							flights={listing.flights!}
 							visaRequired={listing.visaRequired!}
 							id={listing.id}
+							data={listing}
 						/>
 						<div className="order-first mb-10 md:order-last md:col-span-3">
 							<ListingReservation
