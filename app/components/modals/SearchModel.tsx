@@ -74,7 +74,7 @@ const SearchModel = () => {
 
 			const url = qs.stringifyUrl(
 				{
-					url: "/",
+					url: "/holidays",
 					query: updatedQuery,
 				},
 				{ skipNull: true }

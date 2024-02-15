@@ -111,7 +111,7 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 			.then(() => {
 				toast.success("Reserved");
 				setDateRange(initialDateRange);
-				router.push("/trips");
+				router.push("/holidays/trips");
 			})
 			.catch(() => {
 				toast.error("Something went wrong");

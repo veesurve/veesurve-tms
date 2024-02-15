@@ -11,6 +11,7 @@ import dynamic from "next/dynamic";
 import { BsFillBuildingsFill } from "react-icons/bs";
 import { FcPlanner } from "react-icons/fc";
 import { FaArrowsToDot } from "react-icons/fa6";
+import { IoMdArrowDropright } from "react-icons/io";
 
 import {
 	Accordion,
@@ -200,6 +201,20 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 														</div>
 													</div>
 												))}
+												<div>
+													{dayItem.inclusion.map((plan) => (
+														<div key={plan}>
+															<div className="flex flex-col items-start justify-center">
+																<div className="flex flex-row p-2 justify-normal text-wrap text-neutral-800 group-hover:text-neutral-100/80">
+																	<div className="p-1">
+																		<IoMdArrowDropright size={15} />
+																	</div>
+																	<p>{plan}</p>
+																</div>
+															</div>
+														</div>
+													))}
+												</div>
 											</div>
 										</div>
 									</div>
@@ -213,7 +228,7 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 				<Accordion className="mt-10" type="single" collapsible>
 					<AccordionItem
 						className="px-1 group rounded-md text-neutral-400 border-[1px] border-neutral-300 hover:bg-neutral-500 hover:text-neutral-100 hover:scale-[1.02] transition"
-						value="itinerary"
+						value="exclusions"
 					>
 						<AccordionTrigger className="uppercase font-semibold text-3xl ml-4">
 							Exclusions
@@ -243,7 +258,7 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 				<Accordion className="mt-10" type="single" collapsible>
 					<AccordionItem
 						className="px-1 group rounded-md text-neutral-400 border-[1px] border-neutral-300 hover:bg-neutral-500 hover:text-neutral-100 hover:scale-[1.02] transition"
-						value="itinerary"
+						value="tnc"
 					>
 						<AccordionTrigger className="uppercase font-semibold text-3xl ml-4">
 							Terms & Conditions

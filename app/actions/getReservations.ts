@@ -16,7 +16,7 @@ export default async function getReservations(params: IParams) {
 			query.listingId = listingId;
 		}
 		if (userId) {
-			query.userId;
+			query.userId = userId;
 		}
 		if (autherId) {
 			query.listing = { userId: autherId };

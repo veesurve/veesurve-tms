@@ -44,7 +44,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 						onClick={onRent}
 						className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
 					>
-						Rent
+						Create Package
 					</div>
 				)}
 				<div
@@ -63,11 +63,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 						{currentUser ? (
 							<>
 								<MenuItem
-									onClick={() => router.push("/trips")}
+									onClick={() => router.push("/holidays/trips")}
 									label="My Trips"
 								/>
 								<MenuItem
-									onClick={() => router.push("/favorites")}
+									onClick={() => router.push("/holidays/favorites")}
 									label="My Favorites"
 								/>
 
@@ -76,12 +76,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 
 								{currentUser?.email && (
 									<MenuItem
-										onClick={() => router.push("/reservations")}
+										onClick={() => router.push("/holidays/reservations")}
 										label="My Reservations"
 									/>
 								)}
 								<MenuItem
-									onClick={() => router.push("/properties")}
+									onClick={() => router.push("/holidays/properties")}
 									label="My Properties"
 								/>
 
