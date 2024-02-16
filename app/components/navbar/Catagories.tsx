@@ -2,14 +2,13 @@
 
 import Container from "@/app/components/Container";
 import { TbBeach } from "react-icons/tb";
-import {IoDiamond} from 'react-icons/io5'
+import { IoDiamond } from "react-icons/io5";
 import { GiCastle, GiIsland, GiWindmill } from "react-icons/gi";
 import { MdOutlineVilla } from "react-icons/md";
 import { FaSkiing } from "react-icons/fa";
 import { GiMountains } from "react-icons/gi";
 import CategoryBox from "@/app/components/CategoryBox";
 import { usePathname, useSearchParams } from "next/navigation";
-
 
 export const catagories = [
 	{
@@ -55,14 +54,13 @@ export const catagories = [
 ];
 
 const Categories = () => {
- const params=useSearchParams()
- const category=params?.get('category')
- const pathname=usePathname()
- const isMainPage = pathname=== '/'
- if(!isMainPage){
-  return null
- }
-
+	const params = useSearchParams();
+	const category = params?.get("category");
+	const pathname = usePathname();
+	const isMainPage = pathname === "/holidays";
+	if (!isMainPage) {
+		return null;
+	}
 
 	return (
 		<Container>
@@ -71,7 +69,7 @@ const Categories = () => {
 					<CategoryBox
 						key={item.label}
 						label={item.label}
-						selected={category===item.label}
+						selected={category === item.label}
 						icon={item.icon}
 					/>
 				))}

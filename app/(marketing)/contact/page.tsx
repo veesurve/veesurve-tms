@@ -17,18 +17,18 @@ const ContactPage = () => {
 			<div className="h-full w-full p-5 bg-gray-100 flex flex-col gap-4 items-center mt-[110px]">
 				{/* navbar */}
 				<NavbarHome />
-				<h1 className=" font-bold text-2xl uppercase">Vee Surve Experiences</h1>
+
 				<div
 					id="container"
-					className=" w-full h-[70vh] flex gap-2  items-center flex-col "
+					className=" w-full h-[70vh] flex gap-2  items-center md:flex-col "
 				>
-					<h1>Contact Us</h1>
+					<h1 className="font-extrabold text-lg">Contact Us</h1>
 					<div id="container" className="flex flex-row gap-2 w-full px-1">
 						<div
 							id="left"
 							className="w-3/4 p-3 flex flex-col rounded-md border"
 						>
-							<h1>Drop us Line</h1>
+							{/* <h1 className="font-semibold">Drop us a Line!</h1> */}
 							<div id="formContainer">
 								<div id="elemContainer">
 									<label htmlFor="">Name</label>
@@ -66,7 +66,7 @@ const ContactPage = () => {
 								<div>
 									<p>
 										<span className="underline mr-2">Phone:</span>
-										+91-9910173131
+										+91-9667525599
 									</p>
 								</div>
 								<div>
@@ -80,6 +80,15 @@ const ContactPage = () => {
 										</a>
 									</p>
 								</div>
+								<div>
+									<p>
+										<span className="underline mr-2">Address:</span>
+										<span>
+											Civitech Sampriti, Sector-77,
+											<br /> Noida (Delhi NCR), UP-201301
+										</span>
+									</p>
+								</div>
 								<div className="flex flex-row justify-center items-center gap-1">
 									<Button className="group border hover:border-neutral-900 rounded-full font-semibold text-md hover:bg-neutral-100 bg-neutral-900 text-white border-white p-5">
 										<ImWhatsapp
@@ -87,7 +96,7 @@ const ContactPage = () => {
 											className="group-hover:animate-bounce transition group-hover:text-neutral-900 bg-[#44C554] rounded-full"
 										/>
 										<a
-											href="https://wa.me/919910173131"
+											href="https://wa.me/919667525599"
 											target="_blank"
 											className="ml-2 group-hover:text-neutral-900"
 										>

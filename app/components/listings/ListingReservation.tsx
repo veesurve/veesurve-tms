@@ -29,7 +29,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
 	onChangeDate,
 	onSubmit,
 	disabled,
-	disabledDates,
+
 	onChangeAdult,
 	onChangeKid,
 	onChangeBaby,
@@ -37,18 +37,19 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
 	let INR = new Intl.NumberFormat("en-IN", {
 		style: "currency",
 		currency: "INR",
+		maximumSignificantDigits: 5,
 	});
 
 	return (
 		<div className="bg-white rounded-xl border-[1px] border-neutral-200 overflow-hidden">
 			<div className="flex flex-row items-center gap-1 p-4">
-				<div className="text-2xl font-semibold">{INR.format(price)}</div>
+				<p className="text-md font-light text-neutral-600">Starting from :-</p>
+				<div className="text-2xl font-semibold">{INR.format(price)} </div>
 				<div className="font-light text-neutral-600">Per Person</div>
 			</div>
 			<hr />
 			<Calender
 				value={dateRange}
-				disabledDates={disabledDates}
 				onChange={(value) => onChangeDate(value.selection)}
 			/>
 			<hr />
@@ -67,7 +68,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
 				/>
 				<InputS
 					type="number"
-					placeholder="Baby"
+					placeholder="Infants"
 					onChange={(e) => onChangeBaby(Number(e.target.value))}
 				/>
 			</div>
@@ -75,9 +76,9 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
 			<div className="p-4">
 				<Button disabled={disabled} label="Reserve" onClick={onSubmit} />
 			</div>
-			<div className="p-4 flex flex-row items-center justify-center font-semibold text-lg">
-				{INR.format(totalPrice)}
-			</div>
+			{/* <div className="p-4 flex flex-row items-center justify-center font-semibold text-lg">
+				{INR.format(totalPrice)} <p> * Onwards</p>
+			</div> */}
 		</div>
 	);
 };

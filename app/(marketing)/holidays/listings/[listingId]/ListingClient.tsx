@@ -85,7 +85,7 @@ const LisitingClient: React.FC<ListingClientProps> = ({
 	// 		});
 	// };
 
-	const onSubmitButton = useCallback(() => {}, []);
+	// const onSubmitButton = useCallback(() => {}, []);
 
 	const onCreateReservation = useCallback(async () => {
 		if (!currentUser) {

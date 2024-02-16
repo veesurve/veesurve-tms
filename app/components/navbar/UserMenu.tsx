@@ -39,7 +39,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 		<div className="relative">
 			<div className="flex flex-row items-center gap-3">
 				{/* hard code for veesurve */}
-				{currentUser?.email && (
+				{currentUser?.email === "veesurveetms@gmail.com" && (
 					<div
 						onClick={onRent}
 						className="hidden md:block text-sm font-semibold py-3 px-4 rounded-full hover:bg-neutral-100 transition cursor-pointer"
@@ -58,7 +58,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 				</div>
 			</div>
 			{isOpen && (
-				<div className="absolute rounded-xl shadow-md w-[40vw] md:w-4/5 bg-white overflow-hidden right-0 top-12 text-sm">
+				<div
+					className="absolute rounded-xl shadow-md w-[40vw] md:w-4/5 bg-white overflow-hidden right-0 top-12 text-sm"
+					onMouseLeave={toggleOpen}
+				>
 					<div className="flex flex-col cursor-pointer  justify-start">
 						{currentUser ? (
 							<>
@@ -74,7 +77,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 								{/* {currentUser?.email === "veesurveevm@gmail.com" ||
 									currentUser?.email === "abkslesforce@gmail.com" && ( */}
 
-								{currentUser?.email && (
+								{currentUser?.email === "veesurveetms@gmail.com" && (
 									<MenuItem
 										onClick={() => router.push("/holidays/reservations")}
 										label="My Reservations"
@@ -82,11 +85,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
 								)}
 								<MenuItem
 									onClick={() => router.push("/holidays/properties")}
-									label="My Properties"
+									label="My Packages"
 								/>
 
 								{currentUser?.email === "veesurveetms@gmail.com" && (
-									<MenuItem onClick={rentModal.onOpen} label="Rent" />
+									<MenuItem onClick={rentModal.onOpen} label="Create Package" />
 								)}
 								<hr />
 								<MenuItem onClick={() => signOut()} label="Logout" />

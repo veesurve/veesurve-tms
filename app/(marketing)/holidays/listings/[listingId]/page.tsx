@@ -18,8 +18,8 @@ const LisitingPage = async ({ params }: { params: IParams }) => {
 	}
 	return (
 		<LisitingClient
-			currentUser={currentUser}
-			listing={listing}
+			currentUser={currentUser!}
+			listing={listing!}
 			reservations={reservations}
 		/>
 	);

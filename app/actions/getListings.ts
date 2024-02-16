@@ -7,6 +7,10 @@ export interface IListingsParams {
 	locationValue?: string;
 	category?: string;
 	flights?: boolean;
+	veg?: boolean;
+	jainVeg?: boolean;
+	priceLow?: number;
+	priceHigh?: number;
 }
 
 const changeBool = (value: boolean) => {
@@ -19,8 +23,18 @@ const changeBool = (value: boolean) => {
 };
 export default async function getListings(params: IListingsParams) {
 	try {
-		const { userId, startDate, endDate, locationValue, flights, category } =
-			params;
+		const {
+			userId,
+			startDate,
+			endDate,
+			locationValue,
+			flights,
+			category,
+			veg,
+			jainVeg,
+			priceLow,
+			priceHigh,
+		} = params;
 
 		let query: any = {};
 		if (userId) {
@@ -35,6 +49,29 @@ export default async function getListings(params: IListingsParams) {
 		if (flights) {
 			query.flights = changeBool(flights);
 		}
+		if (veg) {
+			query.veg = changeBool(veg);
+		}
+		if (jainVeg) {
+			query.jainVeg = changeBool(jainVeg);
+		}
+		if (priceLow) {
+			query.price = {
+				gte: +priceLow,
+			};
+		}
+		if (priceHigh) {
+			query.price = {
+				lte: +priceHigh,
+			};
+		}
+
+		// if (priceLow && priceHigh) {
+		// 	query.price = {
+		// 		lte: +priceHigh,
+		// 		gte: +priceLow,
+		// 	};
+		// }
 
 		const listings = await prisma.listing.findMany({
 			where: query,
@@ -43,6 +80,7 @@ export default async function getListings(params: IListingsParams) {
 			},
 		});
 
+		// console.log(query);
 		const safeListings: any = listings.map((listing) => ({
 			...listing,
 			createdAt: listing.createdAt.toISOString(),

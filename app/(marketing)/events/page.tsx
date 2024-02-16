@@ -13,7 +13,7 @@ const EventsPage = () => {
 			<div className="h-full w-full p-5 bg-gray-100 flex flex-col gap-4 items-center mt-[110px]">
 				{/* navbar */}
 				<NavbarHome />
-				<h1 className=" font-bold text-2xl uppercase">Vee Surve Experiences</h1>
+
 				<HeroImage
 					url={
 						"https://api.unsplash.com/search/photos?page=1&query=Banquet&client_id=6TgHjsUuXsvgkOzFv0PA3WHOTlUnTELOLIyxJ5Q0WXw"
@@ -22,7 +22,9 @@ const EventsPage = () => {
 
 				<div className="w-[60vw] bg-slate-100s mt-5 pb-3">
 					<div className="flex flex-col justify-center gap-3 text-[16px]">
-						<h1 className="my-4">Event Management Services</h1>
+						<h1 className=" font-bold text-lg my-4">
+							Event Management Services
+						</h1>
 						<p>
 							At{" "}
 							<span className="font-bold uppercase">VEESURVE Experiences</span>,
@@ -42,14 +44,14 @@ const EventsPage = () => {
 						</p>
 						<p>
 							We offer a comprehensive range of services to help you plan and
-							execute your event seamlessly.
-							<br /> Our services include:
+							execute your event seamlessly.<br/>
+							 Our services include:
 						</p>
-						<div className="gap-0 mt-0">
+						<div className="flex flex-col gap-2 mt-0">
 							<p className="underline font-md font-semibold">
 								Event Conceptualization:
 							</p>
-							<br />
+							{/*  */}
 							<div className="pl-10">
 								We work with you to understand your vision and create an event
 								concept that is unique and reflective of your personality and
@@ -57,11 +59,11 @@ const EventsPage = () => {
 								color scheme, and overall aesthetic for your event.
 							</div>
 						</div>
-						<div className="gap-0 mt-0">
+						<div className="flex flex-col gap-2 mt-0">
 							<p className="underline font-md font-semibold">
 								Venue Selection:
 							</p>
-							<br />
+
 							<div className="pl-10">
 								We have a wide network of venues to choose from, including
 								hotels, banquet halls, outdoor spaces, and more. We`&apos;ll
@@ -69,11 +71,11 @@ const EventsPage = () => {
 								and location.
 							</div>
 						</div>
-						<div className="gap-0 mt-0">
+						<div className="flex flex-col gap-2 mt-0">
 							<p className="underline font-md font-semibold">
 								Vendor Management:
 							</p>
-							<br />
+
 							<div className="pl-10">
 								We`&apos;ll help you to find and manage all the vendors you need
 								for your event, including catering, lighting, audio-visual,
@@ -81,9 +83,9 @@ const EventsPage = () => {
 								everything runs smoothly on the day of the event.
 							</div>
 						</div>
-						<div className="gap-0 mt-0">
+						<div className="flex flex-col gap-2 mt-0">
 							<p className="underline font-md font-semibold">Decor:</p>
-							<br />
+
 							<div className="pl-10">
 								We`&apos;ll work with you to create a visually stunning event
 								that will leave a lasting impression on your guests. We`&apos;ll
@@ -91,9 +93,9 @@ const EventsPage = () => {
 								more.
 							</div>
 						</div>
-						<div className="gap-0 mt-0">
+						<div className="flex flex-col gap-2 mt-0">
 							<p className="underline font-md font-semibold">Entertainment:</p>
-							<br />
+
 							<div className="pl-10">
 								We`&apos;ll help you to find the perfect entertainment for your
 								event, including live bands, DJs, comedians, and more.
@@ -101,11 +103,11 @@ const EventsPage = () => {
 								the theme of your event and keeps your guests engaged.
 							</div>
 						</div>
-						<div className="gap-0 mt-0">
+						<div className="flex flex-col gap-2 mt-0">
 							<p className="underline font-md font-semibold">
 								Event Coordination and Execution:
 							</p>
-							<br />
+
 							<div className="pl-10">
 								On the day of the event, we`&apos;ll be there to ensure that
 								everything runs smoothly. We`&apos;ll coordinate with all the
@@ -113,11 +115,11 @@ const EventsPage = () => {
 								problems that may arise.
 							</div>
 						</div>
-						<div className="gap-0 mt-0">
+						<div className="flex flex-col gap-2 mt-0">
 							<p className="underline font-md font-semibold">
 								Event Marketing and Promotion:
 							</p>
-							<br />
+
 							<div className="pl-10">
 								We`&apos;ll help you to promote your event through various
 								channels like social media, email, and more, to attract as many

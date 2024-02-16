@@ -13,7 +13,7 @@ const MarketingPage = () => {
 			<div className="h-full w-full p-5 bg-gray-100 flex flex-col gap-4 items-center mt-[110px]">
 				{/* navbar */}
 				<NavbarHome />
-				<h1 className=" font-bold text-2xl">Vee Surve Experiances</h1>
+				
 				<HeroImage
 					url={
 						"https://api.unsplash.com/search/photos? page=1&query=vaccation&client_id=6TgHjsUuXsvgkOzFv0PA3WHOTlUnTELOLIyxJ5Q0WXw"

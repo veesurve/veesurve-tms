@@ -59,6 +59,7 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 	const listing = data;
 	const cities = data.citiesCovered.split(",");
 	const hotel = data.hotel?.split(",");
+	const depatureCities = data.departureCity?.split(",");
 
 	const coordinates = getByValue(locactionValue)?.latlng;
 	// console.log(flights)
@@ -77,6 +78,21 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 						description={category?.description}
 					/>
 				)}
+
+				<hr />
+				<div className="text-base font-light text-neutral-500">
+					<p className="font-semibold text-lg capitalize">Flights from</p>
+
+					<div className="flex flex-row gap-x-4">
+						{depatureCities.map((city) => (
+							<div key={city} className="flex flex-row gap-2 items-center">
+								<FaLocationDot />
+								{city.trim()}
+							</div>
+						))}
+					</div>
+				</div>
+
 				<hr />
 				<div className="text-base font-light text-neutral-500">
 					<p className="font-semibold text-lg capitalize">Cities covered</p>
@@ -85,7 +101,7 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 						{cities.map((city) => (
 							<div key={city} className="flex flex-row gap-2 items-center">
 								<FaLocationDot />
-								{city}
+								{city.trim()}
 							</div>
 						))}
 					</div>
@@ -97,7 +113,7 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 						{hotel?.map((hot) => (
 							<div key={hot} className="flex flex-row gap-2 items-center">
 								<BsFillBuildingsFill size={50} />
-								{hot}
+								{hot.trim()}
 							</div>
 						))}
 					</div>
@@ -207,7 +223,7 @@ const ListingInfo: React.FC<LisitingInfoProps> = ({
 															<div className="flex flex-col items-start justify-center">
 																<div className="flex flex-row p-2 justify-normal text-wrap text-neutral-800 group-hover:text-neutral-100/80">
 																	<div className="p-1">
-																		<IoMdArrowDropright size={15} />
+																		<IoMdArrowDropright size={20} />
 																	</div>
 																	<p>{plan}</p>
 																</div>

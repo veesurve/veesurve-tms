@@ -12,8 +12,12 @@ export const NavbarHome = () => {
 		 bg-neutral-100 shadow-xl z-[50] "
 		>
 			<div className="w-full justify-between items-center flex flex-row ">
-				<div className="flex flex-row gap-3" onClick={() => router.push("/")}>
+				<div
+					className="flex flex-row items-center gap-3"
+					onClick={() => router.push("/")}
+				>
 					<LogoHome />
+					<h1 className=" font-bold text-2xl upp">VEESURVE Experiences</h1>
 				</div>
 				<div className="hidden md:flex md:flex-row gap-1">
 					<div className="flex gap-1">

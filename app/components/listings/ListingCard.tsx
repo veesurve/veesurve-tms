@@ -70,6 +70,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 	let INR = new Intl.NumberFormat("en-IN", {
 		style: "currency",
 		currency: "INR",
+		maximumSignificantDigits: 5,
 	});
 
 	const reservationDate = useMemo(() => {
@@ -87,10 +88,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
 			onClick={() => router.push(`/holidays/listings/${data.id}`)}
 			className="col-span-1 cursor-pointer group"
 		>
-			<div className="flex flex-col gap-2 w-full h-[700px] rounded-lg ">
+			<div className="flex flex-col gap-2 w-full h-[700px] rounded-lg text-md ">
 				<div className="w-full aspect-square relative overflow-hidden rounded-xl">
 					<Image
 						fill
+						// sizes="(max-width):768px 25vw,(max-width:1200px) 25vw,25vw"
 						src={data.imageSrc}
 						alt="Listing"
 						className="object-cover h-full w-full group-hover:scale-110 transition"
@@ -143,56 +145,66 @@ const ListingCard: React.FC<ListingCardProps> = ({
 					</div>
 				</div>
 
-				<div className="flex flex-row items-center justify-start">
-					<div className=" flex flex-row items-center justify-start mr-2">
-						{data.veg && (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="font-semibold text-green-700">VEG </span>{" "}
+				<div className="flex flex-row gap-2 justify-start ">
+					<div
+						id="meals"
+						className=" flex flex-col items-center justify-start mr-2"
+					>
+						<div>
+							<div className=" flex flex-row items-center justify-start mr-2">
+								{data.veg && (
+									<div className="flex flex-row items-center justify-center gap-1">
+										<span className="font-semibold text-green-700">VEG </span>{" "}
+									</div>
+								)}
 							</div>
-						)}
-					</div>
-					<div className=" flex flex-row items-center justify-start mr-2">
-						{data.nonVeg && (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="font-semibold text-red-800">Non-VEG </span>{" "}
+							<div className=" flex flex-row items-center justify-start mr-2">
+								{data.nonVeg && (
+									<div className="flex flex-row items-center justify-center gap-1">
+										<span className="font-semibold text-red-800">Non-VEG </span>{" "}
+									</div>
+								)}
 							</div>
-						)}
-					</div>
-					<div className=" flex flex-row items-center justify-start mr-2">
-						{data.jainVeg && (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="font-semibold text-green-700">Jain VEG </span>{" "}
+							<div className=" flex flex-row items-center justify-start mr-2">
+								{data.jainVeg && (
+									<div className="flex flex-row items-center justify-center gap-1">
+										<span className="font-semibold text-green-700">
+											Jain VEG{" "}
+										</span>{" "}
+									</div>
+								)}
 							</div>
-						)}
+						</div>
 					</div>
-				</div>
+					<div>
+						<div className="flex flex-col items-center justify-start ">
+							<div className=" flex flex-row items-center justify-start mr-2">
+								{data.breakfast && (
+									<div className="flex flex-row items-center justify-center gap-1">
+										<span className="text-green-700">Breakfast </span>
+										<FaBreadSlice style={{ color: "green" }} />
+									</div>
+								)}
+							</div>
 
-				<div className="flex flex-row items-center justify-start ">
-					<div className=" flex flex-row items-center justify-start mr-2">
-						{data.breakfast && (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-green-700">Breakfast </span>
-								<FaBreadSlice style={{ color: "green" }} />
+							<div className=" flex flex-row items-center justify-start mr-2">
+								{data.lunch && (
+									<div className="flex flex-row items-center justify-center gap-1">
+										<span className="text-green-700">Lunch </span>
+										<GiMeal style={{ color: "green" }} />
+									</div>
+								)}
 							</div>
-						)}
-					</div>
 
-					<div className=" flex flex-row items-center justify-start mr-2">
-						{data.lunch && (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-green-700">Lunch </span>
-								<GiMeal style={{ color: "green" }} />
+							<div className=" flex flex-row items-center justify-start mr-2">
+								{data.dinner && (
+									<div className="flex flex-row items-center justify-center gap-1">
+										<span className="text-green-700">Dinner </span>
+										<GiMeal style={{ color: "green" }} />
+									</div>
+								)}
 							</div>
-						)}
-					</div>
-
-					<div className=" flex flex-row items-center justify-start mr-2">
-						{data.dinner && (
-							<div className="flex flex-row items-center justify-center gap-1">
-								<span className="text-green-700">Dinner </span>
-								<GiMeal style={{ color: "green" }} />
-							</div>
-						)}
+						</div>
 					</div>
 				</div>
 
@@ -224,7 +236,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
 				<div className="font-semibold flex items-start justify-center">
 					{userDetails && (
-						<div className="font-semibold flex flex-row gap-1 justify-between">
+						<div className="font-semibold flex flex-col gap-1 justify-between">
 							<div>{currentUser?.name}</div>
 							<div>{currentUser?.phone}</div>
 							<div>{currentUser?.email}</div>
