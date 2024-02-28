@@ -11,24 +11,24 @@ interface IParams {
 
 const LisitingPage = async ({ params }: { params: IParams }) => {
 	const listing = await getListingById(params);
-	let updatedListing;
-	if (listing?.user.emailVerified === undefined) {
-		updatedListing = {
-			...listing,
-			user: {
-				...listing?.user,
-				emailVerified: null,
-			},
-		};
-	} else {
-		updatedListing = {
-			...listing,
-			user: {
-				...listing?.user,
-				// emailVerified: listing?.user.emailVerified as string,
-			},
-		};
-	}
+	// let updatedListing;
+	// if (listing?.user.emailVerified === undefined) {
+	// 	updatedListing = {
+	// 		...listing,
+	// 		user: {
+	// 			...listing?.user,
+	// 			emailVerified: null,
+	// 		},
+	// 	};
+	// } else {
+	// 	updatedListing = {
+	// 		...listing,
+	// 		user: {
+	// 			...listing?.user,
+	// 			// emailVerified: listing?.user.emailVerified as string,
+	// 		},
+	// 	};
+	// }
 
 	const reservations = await getReservations(params);
 	const currentUser = await getCurrentUser();
@@ -39,7 +39,7 @@ const LisitingPage = async ({ params }: { params: IParams }) => {
 	return (
 		<LisitingClient
 			currentUser={currentUser!}
-			listing={updatedListing}
+			listing={listing}
 			reservations={reservations}
 		/>
 	);
