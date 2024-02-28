@@ -16,7 +16,7 @@ model User {
   name           String?
   email          String?   @unique
   phone          String?
-  emailVerified  DateTime?
+  // emailVerified  DateTime?
   image          String?
   review         String?
   rating         Int?

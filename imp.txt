@@ -1,0 +1,31 @@
+# Environment variables declared in this file are automatically made available to Prisma.
+# See the documentation for more detail: https://pris.ly/d/prisma-schema#accessing-environment-variables-from-the-schema
+
+# Prisma supports the native connection string format for PostgreSQL, MySQL, SQLite, SQL Server, MongoDB and CockroachDB.
+# See the documentation for all the connection string options: https://pris.ly/d/connection-strings
+
+
+
+DATABASE_URL="mongodb+srv://veesurvetms:veesurvetms@cluster0.537qb12.mongodb.net/mydb"
+
+NEXTAUTH_SECRET="nextauth_SECRET"
+
+GITHUB_ID= 9d611577fc270089b402
+GITHUB_SECRET=3e3a59231b32bab52146ae9fcfe3fd00b414e8af
+
+
+GOOGLE_CLIENT_ID=703307820115-o74fdibubki457ss70rh6fattpat8v0s.apps.googleusercontent.com
+GOOGLE_CLIENT_SECRET=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
+
+FACEBOOK_CLIENT_ID=370477622243165
+FACEBOOK_CLIENT_SECRET=5c8c3891e8d24fdacffd20f2f5c3704b
+
+NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME='dlbryyj4u'
+
+UNSPLASH_CLIENT_ID="6TgHjsUuXsvgkOzFv0PA3WHOTlUnTELOLIyxJ5Q0WXw"
+
+EMAILJS_SERVICE_ID=service_zdu7tg3
+EMAILJS_PUBLIC_KEYS=ZLHwm2yp3LLR7jdVw
+
+EMAILJS_TEMPLATE_ID=template_cjfne2b
+# template_cjfne2b

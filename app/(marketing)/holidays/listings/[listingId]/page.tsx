@@ -3,6 +3,7 @@ import getListingById from "@/app/actions/getListingById";
 import EmptyState from "@/app/components/EmptyState";
 import LisitingClient from "./ListingClient";
 import getReservations from "@/app/actions/getReservations";
+import { SafeListings } from "@/app/types";
 
 interface IParams {
 	listingId?: string;
@@ -10,6 +11,25 @@ interface IParams {
 
 const LisitingPage = async ({ params }: { params: IParams }) => {
 	const listing = await getListingById(params);
+	let updatedListing;
+	if (listing?.user.emailVerified === undefined) {
+		updatedListing = {
+			...listing,
+			user: {
+				...listing?.user,
+				emailVerified: null,
+			},
+		};
+	} else {
+		updatedListing = {
+			...listing,
+			user: {
+				...listing?.user,
+				// emailVerified: listing?.user.emailVerified as string,
+			},
+		};
+	}
+
 	const reservations = await getReservations(params);
 	const currentUser = await getCurrentUser();
 
@@ -19,7 +39,7 @@ const LisitingPage = async ({ params }: { params: IParams }) => {
 	return (
 		<LisitingClient
 			currentUser={currentUser!}
-			listing={listing!}
+			listing={updatedListing}
 			reservations={reservations}
 		/>
 	);
